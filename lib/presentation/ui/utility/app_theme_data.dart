@@ -3,6 +3,14 @@ import 'package:flutter/material.dart';
 
 class AppThemeData {
   static ThemeData lightThemeData = ThemeData(
+    // bottomNavigationBarTheme: BottomNavigationBarThemeData(
+    //   backgroundColor: Colors.black,
+    //   selectedItemColor: Colors.black
+
+    // ),
+    textButtonTheme: TextButtonThemeData(
+      style: TextButton.styleFrom(foregroundColor: AppColors.primaryColor),
+    ),
     textTheme: TextTheme(
       titleLarge: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
       bodySmall: TextStyle(

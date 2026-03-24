@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "235507033304",
+    "project_id": "kiro-4b860",
+    "storage_bucket": "kiro-4b860.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:235507033304:android:e22e4d4e6027d84bc023ad",
+        "android_client_info": {
+          "package_name": "com.example.ecommerce"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD4gldxUWnBgskPotyX8CNmk-Krlng7e9s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

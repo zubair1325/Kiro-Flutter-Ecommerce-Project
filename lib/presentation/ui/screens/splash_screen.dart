@@ -1,5 +1,4 @@
 import 'package:ecommerce/presentation/ui/screens/authentication/login_screen.dart';
-import 'package:ecommerce/presentation/ui/utility/assets_path.dart';
 import 'package:ecommerce/presentation/ui/widgets/app_logo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';

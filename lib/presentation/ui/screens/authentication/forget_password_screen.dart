@@ -4,6 +4,7 @@ import 'package:ecommerce/presentation/ui/screens/authentication/signup_screen.d
 import 'package:ecommerce/presentation/ui/utility/app_colors.dart';
 import 'package:ecommerce/presentation/ui/utility/assets_path.dart';
 import 'package:ecommerce/presentation/ui/widgets/app_logo.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -17,7 +18,7 @@ class ForgetPasswordScreen extends StatefulWidget {
 class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
   final TextEditingController _emailTEController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  bool _forgetPasswordInProgress = true;
+  final bool _forgetPasswordInProgress = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,7 +35,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                     AppLogo(width: 150),
                     SizedBox(height: 24),
                     Text(
-                      "Welcome back",
+                      "Recover Your Account",
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                     SizedBox(height: 5),
@@ -44,6 +45,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                     ),
                     SizedBox(height: 5),
                     TextFormField(
+                      keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(
                         hint: Text(
                           "Email Address",
@@ -52,9 +54,12 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                       ),
                       controller: _emailTEController,
                       validator: (value) {
-                        if (value?.trim().isEmpty ?? true) {
+                        if (value == null ||
+                            value.trim().isEmpty ||
+                            !EmailValidator.validate(value)) {
                           return "Provide Valid Email Address";
                         }
+
                         return null;
                       },
                     ),

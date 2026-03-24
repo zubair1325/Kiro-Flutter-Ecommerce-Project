@@ -1,3 +1,4 @@
+import 'package:ecommerce/presentation/ui/screens/authentication/reset_password_screen.dart';
 import 'package:ecommerce/presentation/ui/screens/authentication/signup_screen.dart';
 import 'package:ecommerce/presentation/ui/utility/app_colors.dart';
 
@@ -22,7 +23,7 @@ class _OptVerifyScreenState extends State<OptVerifyScreen> {
 
   int _optExpireTime = 120;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  bool _forgetPasswordInProgress = false;
+  final bool _forgetPasswordInProgress = false;
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +77,7 @@ class _OptVerifyScreenState extends State<OptVerifyScreen> {
                             Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(
-                                builder: (builder) => OptVerifyScreen(),
+                                builder: (builder) => ResetPasswordScreen(),
                               ),
                               (predicate) => false,
                             );

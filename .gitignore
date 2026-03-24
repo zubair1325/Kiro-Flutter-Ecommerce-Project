@@ -17,6 +17,7 @@ migrate_working_dir/
 *.ipr
 *.iws
 .idea/
+.vscode
 
 # The .vscode folder contains launch configuration and tasks you configure in
 # VS Code which you may wish to be included in version control, so this line
@@ -43,3 +44,28 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+node_modules/
+.dart_tool/
+.packages
+build/
+*.log
+
+
+# Firebase Specific
+.firebase/
+fire-debug.log
+firebase-debug.log
+ui-debug.log
+
+# Secret keys (IMPORTANT)
+# If you used FlutterFire CLI, ignore the generated file to keep keys off GitHub
+# lib/firebase_options.dart 
+
+# Web specific
+.web/
+/web/index.html.tmp
+
+# Local Environment / API Keys
+.env
+.env.*

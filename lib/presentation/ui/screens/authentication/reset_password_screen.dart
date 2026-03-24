@@ -2,18 +2,18 @@ import 'package:ecommerce/presentation/ui/screens/authentication/forget_password
 import 'package:ecommerce/presentation/ui/screens/authentication/signup_screen.dart';
 import 'package:ecommerce/presentation/ui/screens/main_bottom_nav_screen.dart';
 import 'package:ecommerce/presentation/ui/widgets/app_logo.dart';
-import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class ResetPasswordScreen extends StatefulWidget {
+  const ResetPasswordScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<ResetPasswordScreen> createState() => _ResetPasswordScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
-  final TextEditingController _emailTEController = TextEditingController();
+class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
+  final TextEditingController _confirmPasswordTEController =
+      TextEditingController();
   final TextEditingController _passwordTEController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final bool _loginInProgress = true;
@@ -33,33 +33,12 @@ class _LoginScreenState extends State<LoginScreen> {
                     AppLogo(),
                     SizedBox(height: 24),
                     Text(
-                      "Welcome Back",
+                      "Reset Password",
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                     SizedBox(height: 24),
                     TextFormField(
                       textInputAction: TextInputAction.next,
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: InputDecoration(
-                        hint: Text(
-                          "Email",
-                          style: Theme.of(context).textTheme.titleSmall,
-                        ),
-                      ),
-                      controller: _emailTEController,
-                      validator: (value) {
-                        if (value == null ||
-                            value.trim().isEmpty ||
-                            !EmailValidator.validate(value)) {
-                          return "Provide Valid Email Address";
-                        }
-
-                        return null;
-                      },
-                    ),
-                    SizedBox(height: 24),
-                    TextFormField(
-                       textInputAction: TextInputAction.done,
                       obscureText: true,
                       decoration: InputDecoration(
                         hint: Text(
@@ -73,6 +52,28 @@ class _LoginScreenState extends State<LoginScreen> {
                           return "Provide Password";
                         } else if (value!.length < 8) {
                           return "Provide at least 8 characters";
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 15),
+                    TextFormField(
+                      textInputAction: TextInputAction.done,
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        hint: Text(
+                          "Confirm Password",
+                          style: Theme.of(context).textTheme.titleSmall,
+                        ),
+                      ),
+                      controller: _confirmPasswordTEController,
+                      validator: (value) {
+                        if (value?.isEmpty ?? true) {
+                          return "Provide Exact Password";
+                        } else if (value!.length < 8) {
+                          return "Provide at least 8 characters";
+                        } else if (_passwordTEController.text != value) {
+                          return "Password not Matched";
                         }
                         return null;
                       },
@@ -93,7 +94,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             );
                           }
                         },
-                        child: Text("LogIn"),
+                        child: Text("Change Password"),
                       ),
                     ),
                     SizedBox(height: 15),
