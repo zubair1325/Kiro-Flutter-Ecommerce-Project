@@ -1,8 +1,9 @@
-import 'package:ecommerce/presentation/ui/screens/authentication/login_screen.dart';
+import 'package:ecommerce/presentation/controller/auth_controller.dart';
+import 'package:ecommerce/presentation/controller/auth_wrapper.dart';
 import 'package:ecommerce/presentation/ui/screens/authentication/opt_verify_screen.dart';
 import 'package:ecommerce/presentation/ui/screens/authentication/signup_screen.dart';
 import 'package:ecommerce/presentation/ui/utility/app_colors.dart';
-import 'package:ecommerce/presentation/ui/utility/assets_path.dart';
+import 'package:ecommerce/presentation/ui/utility/snack_message.dart';
 import 'package:ecommerce/presentation/ui/widgets/app_logo.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,7 @@ class ForgetPasswordScreen extends StatefulWidget {
 class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
   final TextEditingController _emailTEController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final bool _forgetPasswordInProgress = true;
+  bool _forgetPasswordInProgress = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,12 +67,25 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
 
                     SizedBox(height: 15),
                     Visibility(
-                      visible: _forgetPasswordInProgress == true,
+                      visible: _forgetPasswordInProgress == false,
                       replacement: Center(child: CircularProgressIndicator()),
                       child: ElevatedButton(
-                        onPressed: () {
+                        onPressed: () async {
+                          _forgetPasswordInProgress = true;
+                          if (mounted) {
+                            setState(() {});
+                          }
                           if (_formKey.currentState!.validate()) {
-                            Get.to(OptVerifyScreen());
+                            final operationState =
+                                await AuthController.resetPassword(
+                                  _emailTEController.text.trim(),
+                                );
+                            showSnackMessage(
+                              context,
+                              operationState.message!,
+                              operationState.isFailed,
+                            );
+                            Get.to(AuthWrapper());
                           }
                         },
                         child: Text("Send Code"),

@@ -1,9 +1,14 @@
+import 'package:ecommerce/data/firebase/users/add_firebase.dart';
+import 'package:ecommerce/presentation/controller/auth_wrapper.dart';
 import 'package:ecommerce/presentation/ui/screens/authentication/login_screen.dart';
-import 'package:ecommerce/presentation/ui/screens/main_bottom_nav_screen.dart';
 import 'package:ecommerce/presentation/ui/utility/app_colors.dart';
+import 'package:ecommerce/presentation/ui/utility/snack_message.dart';
 import 'package:ecommerce/presentation/ui/widgets/app_logo.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/get_navigation.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -17,7 +22,6 @@ class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController _lastNameTEController = TextEditingController();
   final TextEditingController _primaryMobileNumberTEController =
       TextEditingController();
-
   final TextEditingController _emailTEController = TextEditingController();
   final TextEditingController _cityTEController = TextEditingController();
   final TextEditingController _addressTEController = TextEditingController();
@@ -25,7 +29,9 @@ class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController _confirmPasswordTEController =
       TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final bool _singUpInProgress = true;
+
+  bool _singUpInProgress = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -205,19 +211,11 @@ class _SignupScreenState extends State<SignupScreen> {
 
                     SizedBox(height: 15),
                     Visibility(
-                      visible: _singUpInProgress == true,
+                      visible: _singUpInProgress == false,
                       replacement: Center(child: CircularProgressIndicator()),
                       child: ElevatedButton(
                         onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                builder: (builder) => MainBottomNavScreen(),
-                              ),
-                              (predicate) => false,
-                            );
-                          }
+                          _singUpFireStore();
                         },
                         child: Text("SingUp"),
                       ),
@@ -252,5 +250,56 @@ class _SignupScreenState extends State<SignupScreen> {
         ),
       ),
     );
+  }
+
+  Future _singUpFireStore() async {
+    _singUpInProgress = true;
+    if (mounted) {
+      setState(() {});
+    }
+    if (_formKey.currentState!.validate()) {
+      AddFirebase user = AddFirebase(
+        _cityTEController.text.trim(),
+        _emailTEController.text.trim(),
+        _firstNameTEController.text.trim(),
+        _lastNameTEController.text.trim(),
+        _primaryMobileNumberTEController.text.toString().trim(),
+        _addressTEController.text.trim(),
+        _passwordTEController.text,
+      );
+      await _singUpAuth(user);
+      final operationState = await AddFirebase.addData(user);
+      showSnackMessage(
+        context,
+        operationState.message ?? "Unknown error on singUp_screen",
+        operationState.isFailed,
+      );
+      _singUpInProgress = false;
+      if (mounted) {
+        setState(() {});
+      }
+      Get.offAll(AuthWrapper());
+    }
+  }
+
+  Future _singUpAuth(AddFirebase user) async {
+    try {
+      final credential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+            email: user.email_address!,
+            password: user.password!,
+          );
+      await credential.user?.updateDisplayName(
+        "${user.first_name} ${user.last_name}",
+      );
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        print('The password provided is too weak.');
+      } else if (e.code == 'email-already-in-use') {
+        print('The account already exists for that email.');
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 }

@@ -1,9 +1,12 @@
+import 'package:ecommerce/presentation/controller/auth_controller.dart';
 import 'package:ecommerce/presentation/ui/screens/authentication/forget_password_screen.dart';
 import 'package:ecommerce/presentation/ui/screens/authentication/signup_screen.dart';
 import 'package:ecommerce/presentation/ui/screens/main_bottom_nav_screen.dart';
+import 'package:ecommerce/presentation/ui/utility/snack_message.dart';
 import 'package:ecommerce/presentation/ui/widgets/app_logo.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -16,7 +19,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailTEController = TextEditingController();
   final TextEditingController _passwordTEController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final bool _loginInProgress = true;
+  bool _loginInProgress = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,7 +62,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     SizedBox(height: 24),
                     TextFormField(
-                       textInputAction: TextInputAction.done,
+                      textInputAction: TextInputAction.done,
                       obscureText: true,
                       decoration: InputDecoration(
                         hint: Text(
@@ -79,20 +82,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     SizedBox(height: 24),
                     Visibility(
-                      visible: _loginInProgress == true,
+                      visible: _loginInProgress == false,
                       replacement: Center(child: CircularProgressIndicator()),
                       child: ElevatedButton(
-                        onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                builder: (builder) => MainBottomNavScreen(),
-                              ),
-                              (predicate) => false,
-                            );
-                          }
-                        },
+                        onPressed: _login,
                         child: Text("LogIn"),
                       ),
                     ),
@@ -136,5 +129,36 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
+  }
+
+  Future _login() async {
+    _loginInProgress = true;
+    if (mounted) {
+      setState(() {});
+    }
+    if (_formKey.currentState!.validate()) {
+      final result = await AuthController.userLogin(
+        _emailTEController.text.trim(),
+        _passwordTEController.text,
+      );
+      _loginInProgress = false;
+      if (mounted) {
+        setState(() {});
+      }
+      if (result.credential != null) {
+        // ignore: use_build_context_synchronously
+        showSnackMessage(context, "Logged in Success");
+        Get.offAll(() => MainBottomNavScreen());
+      } else {
+        // print("entered into else condition");
+        // print(result.errorMessage);
+        showSnackMessage(
+          // ignore: use_build_context_synchronously
+          context,
+          result.errorMessage ?? "Unknown Error",
+          true,
+        );
+      }
+    }
   }
 }
