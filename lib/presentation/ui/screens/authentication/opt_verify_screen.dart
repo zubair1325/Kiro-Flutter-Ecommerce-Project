@@ -16,7 +16,6 @@ class OptVerifyScreen extends StatefulWidget {
 class _OptVerifyScreenState extends State<OptVerifyScreen> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     decreaseCount();
   }

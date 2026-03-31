@@ -1,3 +1,4 @@
+import 'package:ecommerce/controller_binder.dart';
 import 'package:ecommerce/presentation/ui/screens/splash_screen.dart';
 import 'package:ecommerce/presentation/ui/utility/app_theme_data.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,9 @@ class App extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: AppThemeData.lightThemeData,
       home: SplashScreen(),
+      initialBinding: ControllerBinder(),
     );
   }
 }
+
+

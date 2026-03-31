@@ -1,18 +1,20 @@
 import 'package:ecommerce/presentation/state_holders/main_bottom_nav_controller.dart';
-import 'package:ecommerce/presentation/ui/screens/product_list_screen.dart';
 import 'package:ecommerce/presentation/ui/widgets/category_item.dart';
+import 'package:ecommerce/presentation/ui/widgets/product_card_item.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_instance/src/extension_instance.dart';
 
-class CategoryScreen extends StatefulWidget {
-  const CategoryScreen({super.key});
+class ProductListScreen extends StatefulWidget {
+  const ProductListScreen({super.key, this.category});
+  final String? category;
 
   @override
-  State<CategoryScreen> createState() => _CategoryScreenState();
+  State<ProductListScreen> createState() => _ProductListScreenState();
 }
 
-class _CategoryScreenState extends State<CategoryScreen> {
+class _ProductListScreenState extends State<ProductListScreen> {
   @override
   Widget build(BuildContext context) {
     return PopScope(
@@ -26,10 +28,14 @@ class _CategoryScreenState extends State<CategoryScreen> {
             icon: Icon(Icons.arrow_back_ios),
             onPressed: () {
               Get.find<MainBottomNavController>().bacToHome();
-               Get.back();
+              Get.back();
             },
           ),
-          title: Text("Categories", style: TextStyle(fontSize: 18)),
+          title: Text(
+            widget.category ?? "Products",
+            style: TextStyle(fontSize: 18),
+          ),
+
           elevation: 3,
           backgroundColor: Colors.white,
         ),
@@ -38,13 +44,13 @@ class _CategoryScreenState extends State<CategoryScreen> {
           child: GridView.builder(
             itemCount: 30,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 4, // 2 columns
+              crossAxisCount: 3, // 2 columns
               crossAxisSpacing: 8.0,
               mainAxisSpacing: 12.0,
-              childAspectRatio: 1,
+              childAspectRatio: 0.9,
             ),
             itemBuilder: (context, index) {
-              return FittedBox(child: CategoryItem());
+              return FittedBox(child: ProductCardItem());
             },
           ),
         ),

@@ -20,7 +20,8 @@ class _AuthWrapperState extends State<AuthWrapper> {
           if (snapshot.hasData) {
             return MainBottomNavScreen();
           } else {
-            return LoginScreen();
+            return MainBottomNavScreen();
+            // return LoginScreen();
           }
         },
       ),

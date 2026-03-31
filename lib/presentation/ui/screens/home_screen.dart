@@ -1,8 +1,13 @@
+import 'package:ecommerce/presentation/state_holders/main_bottom_nav_controller.dart';
+import 'package:ecommerce/presentation/ui/screens/product_list_screen.dart';
 import 'package:ecommerce/presentation/ui/widgets/app_bar_logo.dart';
-import 'package:ecommerce/presentation/ui/widgets/circle_icon_button.dart';
-import 'package:ecommerce/presentation/ui/widgets/image_carousel.dart';
-import 'package:ecommerce/presentation/ui/widgets/section_title.dart';
+import 'package:ecommerce/presentation/ui/widgets/category_item.dart';
+import 'package:ecommerce/presentation/ui/widgets/home/circle_icon_button.dart';
+import 'package:ecommerce/presentation/ui/widgets/home/image_carousel.dart';
+import 'package:ecommerce/presentation/ui/widgets/product_card_item.dart';
+import 'package:ecommerce/presentation/ui/widgets/home/section_title.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -26,13 +31,70 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(height: 18),
               ImageCarousel(),
               const SizedBox(height: 18),
-              SectionTitle(categoryType: "All Categories", onTapAction: () {}),
-               const SizedBox(height: 18),
-
-               Card()
+              SectionTitle(
+                categoryType: "All Categories",
+                onTapAction: () {
+                  Get.find<MainBottomNavController>().changeIndex(0);
+                },
+              ),
+              const SizedBox(height: 18),
+              categoryList,
+              const SizedBox(height: 18),
+              SectionTitle(
+                categoryType: "Popular",
+                onTapAction: () {
+                  Get.to(() => ProductListScreen());
+                },
+              ),
+              const SizedBox(height: 18),
+              popularProductList,
+              const SizedBox(height: 18),
+              SectionTitle(categoryType: "Special", onTapAction: () {}),
+              const SizedBox(height: 18),
+              popularProductList,
+              const SizedBox(height: 18),
+              SectionTitle(categoryType: "New", onTapAction: () {}),
+              const SizedBox(height: 18),
+              popularProductList,
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  SizedBox get categoryList {
+    return SizedBox(
+      height: 130,
+      child: ListView.separated(
+        itemCount: 10,
+        shrinkWrap: true,
+        primary: true,
+        scrollDirection: Axis.horizontal,
+        itemBuilder: (context, index) {
+          return CategoryItem();
+        },
+        separatorBuilder: (BuildContext context, int index) {
+          return SizedBox(width: 10);
+        },
+      ),
+    );
+  }
+
+  SizedBox get popularProductList {
+    return SizedBox(
+      height: 200,
+      child: ListView.separated(
+        itemCount: 10,
+        shrinkWrap: true,
+        primary: true,
+        scrollDirection: Axis.horizontal,
+        itemBuilder: (context, index) {
+          return ProductCardItem();
+        },
+        separatorBuilder: (BuildContext context, int index) {
+          return SizedBox(width: 10);
+        },
       ),
     );
   }

@@ -48,5 +48,10 @@ class AppThemeData {
     progressIndicatorTheme: ProgressIndicatorThemeData(
       color: AppColors.primaryColor,
     ),
+    appBarTheme: AppBarTheme(
+      titleTextStyle: TextStyle(fontSize: 18,color: Colors.black),
+      backgroundColor: Colors.white,
+      elevation: 5,
+    ),
   );
 }
