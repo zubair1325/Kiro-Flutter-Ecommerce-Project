@@ -1,4 +1,4 @@
-import 'package:ecommerce/presentation/ui/screens/product_list_screen.dart';
+import 'package:ecommerce/presentation/ui/screens/product/product_list_screen.dart';
 import 'package:ecommerce/presentation/ui/utility/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';

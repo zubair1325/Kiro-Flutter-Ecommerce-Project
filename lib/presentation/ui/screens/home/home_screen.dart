@@ -1,5 +1,5 @@
 import 'package:ecommerce/presentation/state_holders/main_bottom_nav_controller.dart';
-import 'package:ecommerce/presentation/ui/screens/product_list_screen.dart';
+import 'package:ecommerce/presentation/ui/screens/product/product_list_screen.dart';
 import 'package:ecommerce/presentation/ui/widgets/app_bar_logo.dart';
 import 'package:ecommerce/presentation/ui/widgets/category_item.dart';
 import 'package:ecommerce/presentation/ui/widgets/home/circle_icon_button.dart';

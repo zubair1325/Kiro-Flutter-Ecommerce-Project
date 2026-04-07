@@ -6,8 +6,12 @@ class AuthController {
   final String? errorMessage;
   AuthController({this.credential, this.errorMessage});
 
-  static bool userLoginStatus() {
+  static bool get userLoginStatus {
     return FirebaseAuth.instance.currentUser != null;
+  }
+
+  static void userProfilePicture(String imageLink) async {
+    await FirebaseAuth.instance.currentUser!.updatePhotoURL(imageLink);
   }
 
   static Future<AuthController> userLogin(
@@ -25,7 +29,7 @@ class AuthController {
     }
   }
 
-  static singOut() async {
+  static Future<void> singOut() async {
     await FirebaseAuth.instance.signOut();
   }
 
@@ -36,5 +40,31 @@ class AuthController {
     } catch (e) {
       return OperationState("Account not Found", isFailed: true);
     }
+  }
+
+  static Future<OperationState> changePassword(
+    String currentPassword,
+    String newPassword,
+  ) async {
+    User? user = FirebaseAuth.instance.currentUser;
+
+    if (user != null && user.email != null) {
+      try {
+        // 1. Re-authenticate the user
+        AuthCredential credential = EmailAuthProvider.credential(
+          email: user.email!,
+          password: currentPassword,
+        );
+        await user.reauthenticateWithCredential(credential);
+
+        // 2. Update the password
+        await user.updatePassword(newPassword);
+        print("Password updated successfully.");
+        return OperationState("Password updated successfully.");
+      } on FirebaseAuthException catch (e) {
+        print("Error: ${e.message}");
+      }
+    }
+    return OperationState("Account not Found", isFailed: true);
   }
 }

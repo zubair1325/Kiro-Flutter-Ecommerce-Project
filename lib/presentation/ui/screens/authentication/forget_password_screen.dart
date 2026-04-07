@@ -1,6 +1,5 @@
 import 'package:ecommerce/presentation/controller/auth_controller.dart';
 import 'package:ecommerce/presentation/controller/auth_wrapper.dart';
-import 'package:ecommerce/presentation/ui/screens/authentication/opt_verify_screen.dart';
 import 'package:ecommerce/presentation/ui/screens/authentication/signup_screen.dart';
 import 'package:ecommerce/presentation/ui/utility/app_colors.dart';
 import 'package:ecommerce/presentation/ui/utility/snack_message.dart';

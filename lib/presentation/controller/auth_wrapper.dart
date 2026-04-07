@@ -1,4 +1,3 @@
-import 'package:ecommerce/presentation/ui/screens/authentication/login_screen.dart';
 import 'package:ecommerce/presentation/ui/screens/main_bottom_nav_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

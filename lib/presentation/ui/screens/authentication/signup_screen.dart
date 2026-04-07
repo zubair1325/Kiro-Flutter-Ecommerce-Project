@@ -1,4 +1,6 @@
-import 'package:ecommerce/data/firebase/users/add_firebase.dart';
+import 'package:ecommerce/data/cloud_preset.dart';
+import 'package:ecommerce/data/cloudnary/image_upload.dart';
+import 'package:ecommerce/data/users/user_information.dart';
 import 'package:ecommerce/presentation/controller/auth_wrapper.dart';
 import 'package:ecommerce/presentation/ui/screens/authentication/login_screen.dart';
 import 'package:ecommerce/presentation/ui/utility/app_colors.dart';
@@ -57,6 +59,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       style: Theme.of(context).textTheme.titleSmall,
                     ),
                     SizedBox(height: 15),
+
                     TextFormField(
                       decoration: InputDecoration(
                         hint: Text(
@@ -92,6 +95,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       },
                     ),
                     SizedBox(height: 15),
+
                     TextFormField(
                       textInputAction: TextInputAction.next,
                       keyboardType: TextInputType.number,
@@ -258,7 +262,7 @@ class _SignupScreenState extends State<SignupScreen> {
       setState(() {});
     }
     if (_formKey.currentState!.validate()) {
-      AddFirebase user = AddFirebase(
+      UserInformation user = UserInformation(
         _cityTEController.text.trim(),
         _emailTEController.text.trim(),
         _firstNameTEController.text.trim(),
@@ -268,29 +272,31 @@ class _SignupScreenState extends State<SignupScreen> {
         _passwordTEController.text,
       );
       await _singUpAuth(user);
-      final operationState = await AddFirebase.addData(user);
+      String authUserID = FirebaseAuth.instance.currentUser!.uid;
+      user.userAuthID = authUserID;
+      final operationState = await UserInformation.addData(user);
       showSnackMessage(
         context,
         operationState.message ?? "Unknown error on singUp_screen",
         operationState.isFailed,
       );
-      _singUpInProgress = false;
-      if (mounted) {
-        setState(() {});
-      }
       Get.offAll(AuthWrapper());
+    }
+    _singUpInProgress = false;
+    if (mounted) {
+      setState(() {});
     }
   }
 
-  Future _singUpAuth(AddFirebase user) async {
+  Future _singUpAuth(UserInformation user) async {
     try {
       final credential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(
-            email: user.email_address!,
+            email: user.emailAddress!,
             password: user.password!,
           );
       await credential.user?.updateDisplayName(
-        "${user.first_name} ${user.last_name}",
+        "${user.firstName} ${user.lastName}",
       );
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {

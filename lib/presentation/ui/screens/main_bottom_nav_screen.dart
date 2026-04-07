@@ -1,9 +1,11 @@
+import 'package:ecommerce/presentation/controller/auth_controller.dart';
 import 'package:ecommerce/presentation/state_holders/main_bottom_nav_controller.dart';
-import 'package:ecommerce/presentation/ui/screens/cart_screen.dart';
-import 'package:ecommerce/presentation/ui/screens/category_screen.dart';
-import 'package:ecommerce/presentation/ui/screens/home_screen.dart';
-import 'package:ecommerce/presentation/ui/screens/menu_screen.dart';
-import 'package:ecommerce/presentation/ui/screens/wishlist_screen.dart';
+import 'package:ecommerce/presentation/ui/screens/authentication/login_screen.dart';
+import 'package:ecommerce/presentation/ui/screens/cart/cart_screen.dart';
+import 'package:ecommerce/presentation/ui/screens/categorie/category_screen.dart';
+import 'package:ecommerce/presentation/ui/screens/home/home_screen.dart';
+import 'package:ecommerce/presentation/ui/screens/menu/menu_screen.dart';
+import 'package:ecommerce/presentation/ui/screens/wishlist/wishlist_screen.dart';
 import 'package:ecommerce/presentation/ui/utility/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -16,12 +18,16 @@ class MainBottomNavScreen extends StatefulWidget {
 }
 
 class _MainBottomNavScreenState extends State<MainBottomNavScreen> {
-  final List<Widget> _selectedScreen = const [
-    CategoryScreen(),
-    WishlistScreen(),
-    HomeScreen(),
-    CartScreen(),
-    MenuScreen(),
+  final List<Widget> _selectedScreen = [
+    const CategoryScreen(),
+    AuthController.userLoginStatus
+        ? const WishlistScreen()
+        : const LoginScreen(),
+    const HomeScreen(),
+    AuthController.userLoginStatus
+        ? const CartScreen()
+        : const LoginScreen(),
+    const MenuScreen(),
   ];
 
   @override
