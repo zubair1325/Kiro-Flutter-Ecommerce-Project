@@ -1,6 +1,6 @@
+import 'package:ecommerce/presentation/controller/auth_wrapper.dart';
 import 'package:ecommerce/presentation/ui/screens/authentication/forget_password_screen.dart';
 import 'package:ecommerce/presentation/ui/screens/authentication/signup_screen.dart';
-import 'package:ecommerce/presentation/ui/screens/main_bottom_nav_screen.dart';
 import 'package:ecommerce/presentation/ui/widgets/app_logo.dart';
 import 'package:flutter/material.dart';
 
@@ -37,47 +37,9 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                     SizedBox(height: 24),
-                    TextFormField(
-                      textInputAction: TextInputAction.next,
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        hint: Text(
-                          "Password",
-                          style: Theme.of(context).textTheme.titleSmall,
-                        ),
-                      ),
-                      controller: _passwordTEController,
-                      validator: (value) {
-                        if (value?.isEmpty ?? true) {
-                          return "Provide Password";
-                        } else if (value!.length < 8) {
-                          return "Provide at least 8 characters";
-                        }
-                        return null;
-                      },
-                    ),
+                    enterNewPassword(context),
                     SizedBox(height: 15),
-                    TextFormField(
-                      textInputAction: TextInputAction.done,
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        hint: Text(
-                          "Confirm Password",
-                          style: Theme.of(context).textTheme.titleSmall,
-                        ),
-                      ),
-                      controller: _confirmPasswordTEController,
-                      validator: (value) {
-                        if (value?.isEmpty ?? true) {
-                          return "Provide Exact Password";
-                        } else if (value!.length < 8) {
-                          return "Provide at least 8 characters";
-                        } else if (_passwordTEController.text != value) {
-                          return "Password not Matched";
-                        }
-                        return null;
-                      },
-                    ),
+                    confirmNewPassword(context),
                     SizedBox(height: 24),
                     Visibility(
                       visible: _loginInProgress == true,
@@ -88,7 +50,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                             Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(
-                                builder: (builder) => MainBottomNavScreen(),
+                                builder: (builder) => AuthWrapper(),
                               ),
                               (predicate) => false,
                             );
@@ -137,5 +99,55 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
         ),
       ),
     );
+  }
+
+  TextFormField confirmNewPassword(BuildContext context) {
+    return TextFormField(
+      textInputAction: TextInputAction.done,
+      obscureText: true,
+      decoration: InputDecoration(
+        hint: Text(
+          "Confirm Password",
+          style: Theme.of(context).textTheme.titleSmall,
+        ),
+      ),
+      controller: _confirmPasswordTEController,
+      validator: (value) {
+        if (value?.isEmpty ?? true) {
+          return "Provide Exact Password";
+        } else if (value!.length < 8) {
+          return "Provide at least 8 characters";
+        } else if (_passwordTEController.text != value) {
+          return "Password not Matched";
+        }
+        return null;
+      },
+    );
+  }
+
+  TextFormField enterNewPassword(BuildContext context) {
+    return TextFormField(
+      textInputAction: TextInputAction.next,
+      obscureText: true,
+      decoration: InputDecoration(
+        hint: Text("Password", style: Theme.of(context).textTheme.titleSmall),
+      ),
+      controller: _passwordTEController,
+      validator: (value) {
+        if (value?.isEmpty ?? true) {
+          return "Provide Password";
+        } else if (value!.length < 8) {
+          return "Provide at least 8 characters";
+        }
+        return null;
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _passwordTEController.dispose();
+    _confirmPasswordTEController.dispose();
   }
 }

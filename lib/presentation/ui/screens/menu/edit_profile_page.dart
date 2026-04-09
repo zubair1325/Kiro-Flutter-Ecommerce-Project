@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce/data/cloud_preset.dart';
 import 'package:ecommerce/data/cloudnary/image_upload.dart';
+import 'package:ecommerce/presentation/ui/screens/authentication/email_auth_screen.dart';
 import 'package:ecommerce/presentation/ui/utility/snack_message.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class EditProfilePage extends StatefulWidget {
   bool? isKiroSeller;
   EditProfilePage({super.key, this.isKiroSeller = false});
@@ -30,6 +32,53 @@ class _EditProfilePageState extends State<EditProfilePage> {
   void initState() {
     super.initState();
     _loadUserData();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text("Edit Profile")),
+
+      body: isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : Column(
+              children: [
+                SizedBox(height: 50),
+                ImageUpload(imagePreset: CloudPreset.userPreset, isUser: true),
+
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Form(
+                      key: _formKey,
+                      child: ListView(
+                        children: [
+                          _buildField("First Name", firstNameController),
+                          _buildField("Last Name", lastNameController),
+                          _buildField("Mobile", mobileController),
+                          _buildField("City", cityController),
+                          _buildField("Shipping Address", addressController),
+
+                          const SizedBox(height: 20),
+
+                          Visibility(
+                            visible: isProgressing = true,
+                            replacement: Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                            child: ElevatedButton(
+                              onPressed: _updateProfile,
+                              child: const Text("Continue"),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+    );
   }
 
   Future<void> _loadUserData() async {
@@ -78,9 +127,18 @@ class _EditProfilePageState extends State<EditProfilePage> {
       // ignore: use_build_context_synchronously
       showSnackMessage(context, "Profile Updated Successfully");
       // ignore: use_build_context_synchronously
-      widget.isKiroSeller! ? null : Navigator.pop(context);
+      // print(widget.isKiroSeller);
+      widget.isKiroSeller!
+          ? Navigator.push(
+              // ignore: use_build_context_synchronously
+              context,
+              MaterialPageRoute(builder: (_) => EmailAuthScreen()),
+            )
+          // ignore: use_build_context_synchronously
+          : Navigator.pop(context);
     }
     if (userDocId == null) {
+      // ignore: use_build_context_synchronously
       showSnackMessage(context, "User not found", true);
     }
     isProgressing = false;
@@ -97,53 +155,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
     cityController.dispose();
     addressController.dispose();
     super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text("Edit Profile")),
-
-      body: isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : Column(
-              children: [
-                SizedBox(height: 50),
-                ImageUpload(imagePreset: CloudPreset.userPreset, isUser: true),
-
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Form(
-                      key: _formKey,
-                      child: ListView(
-                        children: [
-                          _buildField("First Name", firstNameController),
-                          _buildField("Last Name", lastNameController),
-                          _buildField("Mobile", mobileController),
-                          _buildField("City", cityController),
-                          _buildField("Shipping Address", addressController),
-
-                          const SizedBox(height: 20),
-
-                          Visibility(
-                            visible: isProgressing = true,
-                            replacement: Center(
-                              child: CircularProgressIndicator(),
-                            ),
-                            child: ElevatedButton(
-                              onPressed: _updateProfile,
-                              child: const Text("Continue"),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-    );
   }
 
   Widget _buildField(String label, TextEditingController controller) {

@@ -9,22 +9,6 @@ import 'package:get/get.dart';
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
 
-  Future<Map<String, dynamic>?> findUserInformation() async {
-    final userAuthData = FirebaseAuth.instance.currentUser;
-    print(userAuthData);
-
-    final querySnapshot = await FirebaseFirestore.instance
-        .collection('user')
-        .where('user_auth_id', isEqualTo: userAuthData?.uid)
-        .get();
-
-    if (querySnapshot.docs.isEmpty) {
-      return null;
-    }
-
-    return querySnapshot.docs.first.data();
-  }
-
   @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
@@ -51,21 +35,21 @@ class ProfilePage extends StatelessWidget {
         ],
       ),
 
-      // 🔥 Using FutureBuilder instead of StreamBuilder
+      //  Using FutureBuilder instead of StreamBuilder
       body: FutureBuilder<Map<String, dynamic>?>(
         future: findUserInformation(),
         builder: (context, snapshot) {
-          // 🔹 Loading
+          //  Loading
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           }
 
-          // 🔹 Error
+          //  Error
           if (snapshot.hasError) {
             return const Center(child: Text("Something went wrong"));
           }
 
-          // 🔹 No data found
+          //  No data found
           if (!snapshot.hasData || snapshot.data == null) {
             return const Center(child: Text("No profile data found"));
           }
@@ -76,7 +60,7 @@ class ProfilePage extends StatelessWidget {
             padding: const EdgeInsets.all(20),
             child: Column(
               children: [
-                // 🔹 Profile Image
+                //  Profile Image
                 CircleAvatar(
                   radius: 50,
                   backgroundImage: user?.photoURL != null
@@ -89,7 +73,7 @@ class ProfilePage extends StatelessWidget {
 
                 const SizedBox(height: 20),
 
-                // 🔹 Name
+                //  Name
                 Text(
                   "${data['first_name'] ?? ''} ${data['last_name'] ?? ''}",
                   style: const TextStyle(
@@ -122,6 +106,22 @@ class ProfilePage extends StatelessWidget {
         },
       ),
     );
+  }
+
+  Future<Map<String, dynamic>?> findUserInformation() async {
+    final userAuthData = FirebaseAuth.instance.currentUser;
+    // print(userAuthData);
+
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection('user')
+        .where('user_auth_id', isEqualTo: userAuthData?.uid)
+        .get();
+
+    if (querySnapshot.docs.isEmpty) {
+      return null;
+    }
+
+    return querySnapshot.docs.first.data();
   }
 
   Widget _buildTile(String title, String value) {

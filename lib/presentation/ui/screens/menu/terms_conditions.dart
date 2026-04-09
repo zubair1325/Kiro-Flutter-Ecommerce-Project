@@ -1,7 +1,6 @@
 import 'package:ecommerce/presentation/ui/screens/menu/login_state.dart';
 import 'package:ecommerce/presentation/ui/utility/app_colors.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:get/route_manager.dart';
 
 class TermsConditions extends StatelessWidget {

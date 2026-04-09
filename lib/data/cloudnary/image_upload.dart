@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 
+// ignore: must_be_immutable
 class ImageUpload extends StatefulWidget {
   final String? imagePreset;
   bool? isUser;
@@ -26,14 +27,10 @@ class _ImageUploadState extends State<ImageUpload> {
 
   @override
   Widget build(BuildContext context) {
-    // return IconButton(
-    //   onPressed: () => uploadImage(),
-    //   icon: Icon(Icons.photo_camera),
-    // );
     return Center(
       child: Stack(
         children: [
-          // 🔹 Profile Image
+          //  Profile Image
           CircleAvatar(
             radius: 55,
             backgroundColor: Colors.grey.shade200,
@@ -44,8 +41,6 @@ class _ImageUploadState extends State<ImageUpload> {
                 ? const Icon(Icons.person, size: 55, color: Colors.grey)
                 : null,
           ),
-
-          // 🔹 Edit Icon (Top Right)
           Positioned(
             bottom: 0,
             right: 0,
@@ -69,8 +64,8 @@ class _ImageUploadState extends State<ImageUpload> {
   }
 
   Future<void> uploadImage() async {
-    print("------------------------");
-    print(widget.isUser);
+    // print("------------------------");
+    // print(widget.isUser);
     final ImagePicker picker = ImagePicker();
     String? imageUrl;
 
@@ -107,12 +102,13 @@ class _ImageUploadState extends State<ImageUpload> {
           widget.isUser!
               ? AuthController.userProfilePicture(imageUrl.toString())
               : null;
-          print("Upload successful: $imageUrl");
+          // print("Upload successful: $imageUrl");
         } else {
-          print("Upload failed with status: ${response.statusCode}");
+          // print("Upload failed with status: ${response.statusCode}");
         }
       } catch (e) {
-        print("Error during upload: $e");
+        // print("Error during upload: $e");
+    
       }
     }
   }

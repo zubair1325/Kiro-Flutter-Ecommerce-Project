@@ -84,14 +84,8 @@ class _LoginStateState extends State<LoginState> {
                     _CustomListTile(
                       title: "Kiro Seller",
                       icon: Icons.shop,
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) =>  EditProfilePage(),
-                          ),
-                        );
-                      },
+                      onTap: () =>
+                          Get.offAll(EditProfilePage(isKiroSeller: true)),
                     ),
                   ],
                 ),
@@ -119,7 +113,9 @@ class _LoginStateState extends State<LoginState> {
                     _CustomListTile(
                       title: "Delete Account",
                       icon: Icons.delete_forever,
-                      onTap: () => Get.offAll(AboutUsPage()),
+                      onTap: () {
+                       
+                      },
                     ),
                   ],
                 ),

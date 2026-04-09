@@ -23,8 +23,8 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
     Colors.pink,
   ];
   List<String> allSize = ["M", "L", "XL", "XXL", "XXXL"];
-  Color? _selectedColor;
-  String? _selectedSize;
+  Color? selectedColor;
+  String? selectedSize;
 
   @override
   Widget build(BuildContext context) {
@@ -47,10 +47,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
           Expanded(
             child: SingleChildScrollView(
               child: Column(
-                children: [
-                  const ProductImageCarousel(),
-                  productDetailsBody,
-                ],
+                children: [const ProductImageCarousel(), productDetailsBody],
               ),
             ),
           ),
@@ -62,113 +59,101 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
 
   Padding get productDetailsBody {
     return Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          const Expanded(
-                            child: Text(
-                              maxLines: 5,
-                              overflow: TextOverflow.ellipsis,
-                              "Nike Sport Shoe 2023 Edition ED26R - Save up to 30%",
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 8),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-            
-                        children: [
-                          Wrap(
-                            crossAxisAlignment: WrapCrossAlignment.center,
-                            children: [
-                              Icon(Icons.star, size: 16, color: Colors.amber),
-                              Text(
-                                "4.8",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 16,
-                                  color: Colors.black54,
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(width: 8),
-                          Text(
-                            "Reviews",
-                            style: TextStyle(
-                              color: AppColors.primaryColor,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 16,
-                            ),
-                          ),
-                          SizedBox(width: 8),
-                          Card(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadiusGeometry.circular(4),
-                            ),
-                            color: AppColors.primaryColor,
-                            child: Padding(
-                              padding: const EdgeInsets.all(2.0),
-                              child: Icon(
-                                Icons.favorite_border_rounded,
-                                size: 16,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 8),
-                      Text(
-                        "Color",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16,
-                        ),
-                      ),
-                      SizedBox(height: 8),
-                      ColorSelector(
-                        allColors: allColors,
-                        onChange: (selectedColor) {
-                          _selectedColor = selectedColor;
-                        },
-                      ),
-                      SizedBox(height: 16),
-                      Text(
-                        "Size",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16,
-                        ),
-                      ),
-                      SizedBox(height: 8),
-                      SizeSelector(
-                        allSize: allSize,
-                        onChange: (selectedSize) {
-                          _selectedSize = selectedSize;
-                        },
-                      ),
-                      SizedBox(height: 16),
-                      Text(
-                        "Description",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16,
-                        ),
-                      ),
-                      SizedBox(height: 8),
-                      ProductDescription(),
-                    ],
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Expanded(
+                child: Text(
+                  maxLines: 5,
+                  overflow: TextOverflow.ellipsis,
+                  "Nike Sport Shoe 2023 Edition ED26R - Save up to 30%",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+
+            children: [
+              Wrap(
+                crossAxisAlignment: WrapCrossAlignment.center,
+                children: [
+                  Icon(Icons.star, size: 16, color: Colors.amber),
+                  Text(
+                    "4.8",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 16,
+                      color: Colors.black54,
+                    ),
                   ),
-                );
+                ],
+              ),
+              SizedBox(width: 8),
+              Text(
+                "Reviews",
+                style: TextStyle(
+                  color: AppColors.primaryColor,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16,
+                ),
+              ),
+              SizedBox(width: 8),
+              Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadiusGeometry.circular(4),
+                ),
+                color: AppColors.primaryColor,
+                child: Padding(
+                  padding: const EdgeInsets.all(2.0),
+                  child: Icon(
+                    Icons.favorite_border_rounded,
+                    size: 16,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 8),
+          Text(
+            "Color",
+            style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+          ),
+          SizedBox(height: 8),
+          ColorSelector(
+            allColors: allColors,
+            onChange: (selectedColor) {
+              selectedColor = selectedColor;
+            },
+          ),
+          SizedBox(height: 16),
+          Text(
+            "Size",
+            style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+          ),
+          SizedBox(height: 8),
+          SizeSelector(
+            allSize: allSize,
+            onChange: (selectedSize) {
+              selectedSize = selectedSize;
+            },
+          ),
+          SizedBox(height: 16),
+          Text(
+            "Description",
+            style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+          ),
+          SizedBox(height: 8),
+          ProductDescription(),
+        ],
+      ),
+    );
   }
 
   Container get priceAndAddToCartSection {
@@ -218,4 +203,3 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
     );
   }
 }
-

@@ -44,49 +44,14 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                     SizedBox(height: 5),
-                    TextFormField(
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: InputDecoration(
-                        hint: Text(
-                          "Email Address",
-                          style: Theme.of(context).textTheme.titleSmall,
-                        ),
-                      ),
-                      controller: _emailTEController,
-                      validator: (value) {
-                        if (value == null ||
-                            value.trim().isEmpty ||
-                            !EmailValidator.validate(value)) {
-                          return "Provide Valid Email Address";
-                        }
-
-                        return null;
-                      },
-                    ),
+                    emailAddressTextFormField(context),
 
                     SizedBox(height: 15),
                     Visibility(
                       visible: _forgetPasswordInProgress == false,
                       replacement: Center(child: CircularProgressIndicator()),
                       child: ElevatedButton(
-                        onPressed: () async {
-                          _forgetPasswordInProgress = true;
-                          if (mounted) {
-                            setState(() {});
-                          }
-                          if (_formKey.currentState!.validate()) {
-                            final operationState =
-                                await AuthController.resetPassword(
-                                  _emailTEController.text.trim(),
-                                );
-                            showSnackMessage(
-                              context,
-                              operationState.message!,
-                              operationState.isFailed,
-                            );
-                            Get.to(AuthWrapper());
-                          }
-                        },
+                        onPressed: _sendRestPasswordLink,
                         child: Text("Send Code"),
                       ),
                     ),
@@ -121,5 +86,53 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
         ),
       ),
     );
+  }
+
+  Future _sendRestPasswordLink() async {
+    _forgetPasswordInProgress = true;
+    if (mounted) {
+      setState(() {});
+    }
+    if (_formKey.currentState!.validate()) {
+      final operationState = await AuthController.resetPassword(
+        _emailTEController.text.trim(),
+      );
+      showSnackMessage(
+        // ignore: use_build_context_synchronously
+        context,
+        operationState.message!,
+        operationState.isFailed,
+      );
+      Get.to(AuthWrapper());
+    }
+  }
+
+  TextFormField emailAddressTextFormField(BuildContext context) {
+    return TextFormField(
+      textInputAction: TextInputAction.done,
+      keyboardType: TextInputType.emailAddress,
+      decoration: InputDecoration(
+        hint: Text(
+          "Email Address",
+          style: Theme.of(context).textTheme.titleSmall,
+        ),
+      ),
+      controller: _emailTEController,
+      validator: (value) {
+        if (value == null ||
+            value.trim().isEmpty ||
+            !EmailValidator.validate(value)) {
+          return "Provide Valid Email Address";
+        }
+
+        return null;
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _emailTEController.dispose();
   }
 }

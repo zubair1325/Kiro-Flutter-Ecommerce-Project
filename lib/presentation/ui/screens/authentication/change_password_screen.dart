@@ -57,101 +57,17 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     SizedBox(height: 45),
                     AppLogo(width: 120),
                     SizedBox(height: 30),
-                    TextFormField(
-                      textInputAction: TextInputAction.next,
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        hint: Text(
-                          "Current Password",
-                          style: Theme.of(context).textTheme.titleSmall,
-                        ),
-                      ),
-                      controller: _currentPasswordTEController,
-                      validator: (value) {
-                        if (value?.isEmpty ?? true) {
-                          return "Provide Password";
-                        } else if (value!.length < 8) {
-                          return "Provide at least 8 characters";
-                        }
-                        return null;
-                      },
-                    ),
+                    currentPassword(context),
                     SizedBox(height: 15),
-                    TextFormField(
-                      textInputAction: TextInputAction.next,
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        hint: Text(
-                          "New Password",
-                          style: Theme.of(context).textTheme.titleSmall,
-                        ),
-                      ),
-                      controller: _newPasswordTEController,
-                      validator: (value) {
-                        if (value?.isEmpty ?? true) {
-                          return "Provide Password";
-                        } else if (value!.length < 8) {
-                          return "Provide at least 8 characters";
-                        }
-                        return null;
-                      },
-                    ),
+                    newPassword(context),
                     SizedBox(height: 15),
-                    TextFormField(
-                      textInputAction: TextInputAction.done,
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        hint: Text(
-                          "Confirm New Password",
-                          style: Theme.of(context).textTheme.titleSmall,
-                        ),
-                      ),
-                      controller: _confirmNewPasswordTEController,
-                      validator: (value) {
-                        if (value?.isEmpty ?? true) {
-                          return "Provide Exact Password";
-                        } else if (value!.length < 8) {
-                          return "Provide at least 8 characters";
-                        } else if (_newPasswordTEController.text != value) {
-                          return "Password not Matched";
-                        }
-                        return null;
-                      },
-                    ),
-
+                    confirmNewPassword(context),
                     SizedBox(height: 15),
                     Visibility(
                       visible: changePasswordProgress == false,
                       replacement: Center(child: CircularProgressIndicator()),
                       child: ElevatedButton(
-                        onPressed: () async {
-                          changePasswordProgress = true;
-                          if (mounted) {
-                            setState(() {});
-                          }
-                          if (_formKey.currentState!.validate()) {
-                            final operationState =
-                                await AuthController.changePassword(
-                                  _currentPasswordTEController.text,
-                                  _confirmNewPasswordTEController.text,
-                                );
-
-                            if (!operationState.isFailed) {
-                              await AuthController.singOut();
-                              Get.offAll(LoginScreen());
-                            }
-                            showSnackMessage(
-                              context,
-                              operationState.message ??
-                                  "Unknown error on singUp_screen",
-                              operationState.isFailed,
-                            );
-                          }
-                          changePasswordProgress = false;
-                          if (mounted) {
-                            setState(() {});
-                          }
-                        },
+                        onPressed: _userPasswordChange,
                         child: Text("Continue"),
                       ),
                     ),
@@ -163,5 +79,109 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
         ),
       ),
     );
+  }
+
+  Future _userPasswordChange() async {
+    changePasswordProgress = true;
+    if (mounted) {
+      setState(() {});
+    }
+    if (_formKey.currentState!.validate()) {
+      final operationState = await AuthController.changePassword(
+        _currentPasswordTEController.text,
+        _confirmNewPasswordTEController.text,
+      );
+
+      if (!operationState.isFailed) {
+        await AuthController.singOut();
+        Get.offAll(LoginScreen());
+      }
+      showSnackMessage(
+        // ignore: use_build_context_synchronously
+        context,
+        operationState.message ?? "Unknown error on singUp_screen",
+        operationState.isFailed,
+      );
+    }
+    changePasswordProgress = false;
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
+  TextFormField confirmNewPassword(BuildContext context) {
+    return TextFormField(
+      textInputAction: TextInputAction.done,
+      obscureText: true,
+      decoration: InputDecoration(
+        hint: Text(
+          "Confirm New Password",
+          style: Theme.of(context).textTheme.titleSmall,
+        ),
+      ),
+      controller: _confirmNewPasswordTEController,
+      validator: (value) {
+        if (value?.isEmpty ?? true) {
+          return "Provide Exact Password";
+        } else if (value!.length < 8) {
+          return "Provide at least 8 characters";
+        } else if (_newPasswordTEController.text != value) {
+          return "Password not Matched";
+        }
+        return null;
+      },
+    );
+  }
+
+  TextFormField newPassword(BuildContext context) {
+    return TextFormField(
+      textInputAction: TextInputAction.next,
+      obscureText: true,
+      decoration: InputDecoration(
+        hint: Text(
+          "New Password",
+          style: Theme.of(context).textTheme.titleSmall,
+        ),
+      ),
+      controller: _newPasswordTEController,
+      validator: (value) {
+        if (value?.isEmpty ?? true) {
+          return "Provide Password";
+        } else if (value!.length < 8) {
+          return "Provide at least 8 characters";
+        }
+        return null;
+      },
+    );
+  }
+
+  TextFormField currentPassword(BuildContext context) {
+    return TextFormField(
+      textInputAction: TextInputAction.next,
+      obscureText: true,
+      decoration: InputDecoration(
+        hint: Text(
+          "Current Password",
+          style: Theme.of(context).textTheme.titleSmall,
+        ),
+      ),
+      controller: _currentPasswordTEController,
+      validator: (value) {
+        if (value?.isEmpty ?? true) {
+          return "Provide Password";
+        } else if (value!.length < 8) {
+          return "Provide at least 8 characters";
+        }
+        return null;
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _confirmNewPasswordTEController.dispose();
+    _currentPasswordTEController.dispose();
+    _newPasswordTEController.dispose();
   }
 }

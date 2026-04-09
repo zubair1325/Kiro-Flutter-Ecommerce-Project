@@ -1,5 +1,3 @@
-import 'package:ecommerce/data/cloud_preset.dart';
-import 'package:ecommerce/data/cloudnary/image_upload.dart';
 import 'package:ecommerce/data/users/user_information.dart';
 import 'package:ecommerce/presentation/controller/auth_wrapper.dart';
 import 'package:ecommerce/presentation/ui/screens/authentication/login_screen.dart';
@@ -60,167 +58,30 @@ class _SignupScreenState extends State<SignupScreen> {
                     ),
                     SizedBox(height: 15),
 
-                    TextFormField(
-                      decoration: InputDecoration(
-                        hint: Text(
-                          "First Name",
-                          style: Theme.of(context).textTheme.titleSmall,
-                        ),
-                      ),
-                      textInputAction: TextInputAction.next,
-
-                      controller: _firstNameTEController,
-                      validator: (value) {
-                        if (value?.trim().isEmpty ?? true) {
-                          return "Name is Required";
-                        }
-                        return null;
-                      },
-                    ),
+                    firstNameTextField(context),
                     SizedBox(height: 15),
-                    TextFormField(
-                      textInputAction: TextInputAction.next,
-                      decoration: InputDecoration(
-                        hint: Text(
-                          "Last Name",
-                          style: Theme.of(context).textTheme.titleSmall,
-                        ),
-                      ),
-                      controller: _lastNameTEController,
-                      validator: (value) {
-                        if (value?.trim().isEmpty ?? true) {
-                          return "Name is Required";
-                        }
-                        return null;
-                      },
-                    ),
+                    lastNameTextField(context),
                     SizedBox(height: 15),
 
-                    TextFormField(
-                      textInputAction: TextInputAction.next,
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                        hint: Text(
-                          "Mobile",
-                          style: Theme.of(context).textTheme.titleSmall,
-                        ),
-                      ),
-                      controller: _primaryMobileNumberTEController,
-                      validator: (value) {
-                        if (value?.trim().isEmpty ?? true) {
-                          return "Mobile Number is Required";
-                        }
-                        return null;
-                      },
-                    ),
+                    phoneNumberTextField(context),
 
                     SizedBox(height: 15),
-                    TextFormField(
-                      textInputAction: TextInputAction.next,
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: InputDecoration(
-                        hint: Text(
-                          "Email",
-                          style: Theme.of(context).textTheme.titleSmall,
-                        ),
-                      ),
-                      controller: _emailTEController,
-                      validator: (value) {
-                        if (value == null ||
-                            value.trim().isEmpty ||
-                            !EmailValidator.validate(value)) {
-                          return "Provide Valid Email Address";
-                        }
-
-                        return null;
-                      },
-                    ),
+                    emailAddressTextField(context),
                     SizedBox(height: 15),
-                    TextFormField(
-                      textInputAction: TextInputAction.next,
-                      decoration: InputDecoration(
-                        hint: Text(
-                          "City",
-                          style: Theme.of(context).textTheme.titleSmall,
-                        ),
-                      ),
-                      controller: _cityTEController,
-                      validator: (value) {
-                        if (value?.trim().isEmpty ?? true) {
-                          return "City Name is Required";
-                        }
-                        return null;
-                      },
-                    ),
+                    cityTextField(context),
                     SizedBox(height: 15),
-                    TextFormField(
-                      textInputAction: TextInputAction.next,
-                      maxLines: 4,
-                      decoration: InputDecoration(
-                        hint: Text(
-                          "Shipping Address",
-                          style: Theme.of(context).textTheme.titleSmall,
-                        ),
-                      ),
-                      controller: _addressTEController,
-                      validator: (value) {
-                        if (value?.trim().isEmpty ?? true) {
-                          return "Provide Current Address";
-                        }
-                        return null;
-                      },
-                    ),
+                    shippingAddressTextField(context),
                     SizedBox(height: 15),
-                    TextFormField(
-                      textInputAction: TextInputAction.next,
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        hint: Text(
-                          "Password",
-                          style: Theme.of(context).textTheme.titleSmall,
-                        ),
-                      ),
-                      controller: _passwordTEController,
-                      validator: (value) {
-                        if (value?.isEmpty ?? true) {
-                          return "Provide Password";
-                        } else if (value!.length < 8) {
-                          return "Provide at least 8 characters";
-                        }
-                        return null;
-                      },
-                    ),
+                    passwordTextField(context),
                     SizedBox(height: 15),
-                    TextFormField(
-                      textInputAction: TextInputAction.done,
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        hint: Text(
-                          "Confirm Password",
-                          style: Theme.of(context).textTheme.titleSmall,
-                        ),
-                      ),
-                      controller: _confirmPasswordTEController,
-                      validator: (value) {
-                        if (value?.isEmpty ?? true) {
-                          return "Provide Exact Password";
-                        } else if (value!.length < 8) {
-                          return "Provide at least 8 characters";
-                        } else if (_passwordTEController.text != value) {
-                          return "Password not Matched";
-                        }
-                        return null;
-                      },
-                    ),
+                    confirmPasswordTextField(context),
 
                     SizedBox(height: 15),
                     Visibility(
                       visible: _singUpInProgress == false,
                       replacement: Center(child: CircularProgressIndicator()),
                       child: ElevatedButton(
-                        onPressed: () {
-                          _singUpFireStore();
-                        },
+                        onPressed: _singUpFireStore,
                         child: Text("SingUp"),
                       ),
                     ),
@@ -256,6 +117,155 @@ class _SignupScreenState extends State<SignupScreen> {
     );
   }
 
+  TextFormField confirmPasswordTextField(BuildContext context) {
+    return TextFormField(
+      textInputAction: TextInputAction.done,
+      obscureText: true,
+      decoration: InputDecoration(
+        hint: Text(
+          "Confirm Password",
+          style: Theme.of(context).textTheme.titleSmall,
+        ),
+      ),
+      controller: _confirmPasswordTEController,
+      validator: (value) {
+        if (value?.isEmpty ?? true) {
+          return "Provide Exact Password";
+        } else if (value!.length < 8) {
+          return "Provide at least 8 characters";
+        } else if (_passwordTEController.text != value) {
+          return "Password not Matched";
+        }
+        return null;
+      },
+    );
+  }
+
+  TextFormField passwordTextField(BuildContext context) {
+    return TextFormField(
+      textInputAction: TextInputAction.next,
+      obscureText: true,
+      decoration: InputDecoration(
+        hint: Text("Password", style: Theme.of(context).textTheme.titleSmall),
+      ),
+      controller: _passwordTEController,
+      validator: (value) {
+        if (value?.isEmpty ?? true) {
+          return "Provide Password";
+        } else if (value!.length < 8) {
+          return "Provide at least 8 characters";
+        }
+        return null;
+      },
+    );
+  }
+
+  TextFormField shippingAddressTextField(BuildContext context) {
+    return TextFormField(
+      textInputAction: TextInputAction.next,
+      maxLines: 4,
+      decoration: InputDecoration(
+        hint: Text(
+          "Shipping Address",
+          style: Theme.of(context).textTheme.titleSmall,
+        ),
+      ),
+      controller: _addressTEController,
+      validator: (value) {
+        if (value?.trim().isEmpty ?? true) {
+          return "Provide Current Address";
+        }
+        return null;
+      },
+    );
+  }
+
+  TextFormField cityTextField(BuildContext context) {
+    return TextFormField(
+      textInputAction: TextInputAction.next,
+      decoration: InputDecoration(
+        hint: Text("City", style: Theme.of(context).textTheme.titleSmall),
+      ),
+      controller: _cityTEController,
+      validator: (value) {
+        if (value?.trim().isEmpty ?? true) {
+          return "City Name is Required";
+        }
+        return null;
+      },
+    );
+  }
+
+  TextFormField emailAddressTextField(BuildContext context) {
+    return TextFormField(
+      textInputAction: TextInputAction.next,
+      keyboardType: TextInputType.emailAddress,
+      decoration: InputDecoration(
+        hint: Text("Email", style: Theme.of(context).textTheme.titleSmall),
+      ),
+      controller: _emailTEController,
+      validator: (value) {
+        if (value == null ||
+            value.trim().isEmpty ||
+            !EmailValidator.validate(value)) {
+          return "Provide Valid Email Address";
+        }
+
+        return null;
+      },
+    );
+  }
+
+  TextFormField phoneNumberTextField(BuildContext context) {
+    return TextFormField(
+      textInputAction: TextInputAction.next,
+      keyboardType: TextInputType.number,
+      decoration: InputDecoration(
+        hint: Text("Mobile", style: Theme.of(context).textTheme.titleSmall),
+      ),
+      controller: _primaryMobileNumberTEController,
+      validator: (value) {
+        if (value?.trim().isEmpty ?? true) {
+          return "Mobile Number is Required";
+        }
+        return null;
+      },
+    );
+  }
+
+  TextFormField lastNameTextField(BuildContext context) {
+    return TextFormField(
+      textInputAction: TextInputAction.next,
+      decoration: InputDecoration(
+        hint: Text("Last Name", style: Theme.of(context).textTheme.titleSmall),
+      ),
+      controller: _lastNameTEController,
+      validator: (value) {
+        if (value?.trim().isEmpty ?? true) {
+          return "Name is Required";
+        }
+        return null;
+      },
+    );
+  }
+
+  TextFormField firstNameTextField(BuildContext context) {
+    return TextFormField(
+      decoration: InputDecoration(
+        hint: Text("First Name", style: Theme.of(context).textTheme.titleSmall),
+      ),
+      textInputAction: TextInputAction.next,
+
+      controller: _firstNameTEController,
+      validator: (value) {
+        if (value?.trim().isEmpty ?? true) {
+          return "Name is Required";
+        }
+        return null;
+      },
+    );
+  }
+
   Future _singUpFireStore() async {
     _singUpInProgress = true;
     if (mounted) {
@@ -276,6 +286,7 @@ class _SignupScreenState extends State<SignupScreen> {
       user.userAuthID = authUserID;
       final operationState = await UserInformation.addData(user);
       showSnackMessage(
+        // ignore: use_build_context_synchronously
         context,
         operationState.message ?? "Unknown error on singUp_screen",
         operationState.isFailed,
@@ -300,12 +311,25 @@ class _SignupScreenState extends State<SignupScreen> {
       );
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
-        print('The password provided is too weak.');
+        // print('The password provided is too weak.');
       } else if (e.code == 'email-already-in-use') {
-        print('The account already exists for that email.');
+        // print('The account already exists for that email.');
       }
     } catch (e) {
-      print(e);
+      // print(e);
     }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _firstNameTEController.dispose();
+    _lastNameTEController.dispose();
+    _addressTEController.dispose();
+    _cityTEController.dispose();
+    _passwordTEController.dispose();
+    _confirmPasswordTEController.dispose();
+    _emailTEController.dispose();
+    _primaryMobileNumberTEController.dispose();
   }
 }

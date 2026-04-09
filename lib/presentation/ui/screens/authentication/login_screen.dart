@@ -40,46 +40,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                     SizedBox(height: 24),
-                    TextFormField(
-                      textInputAction: TextInputAction.next,
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: InputDecoration(
-                        hint: Text(
-                          "Email",
-                          style: Theme.of(context).textTheme.titleSmall,
-                        ),
-                      ),
-                      controller: _emailTEController,
-                      validator: (value) {
-                        if (value == null ||
-                            value.trim().isEmpty ||
-                            !EmailValidator.validate(value)) {
-                          return "Provide Valid Email Address";
-                        }
-
-                        return null;
-                      },
-                    ),
+                    emailTextFormField(context),
                     SizedBox(height: 24),
-                    TextFormField(
-                      textInputAction: TextInputAction.done,
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        hint: Text(
-                          "Password",
-                          style: Theme.of(context).textTheme.titleSmall,
-                        ),
-                      ),
-                      controller: _passwordTEController,
-                      validator: (value) {
-                        if (value?.isEmpty ?? true) {
-                          return "Provide Password";
-                        } else if (value!.length < 8) {
-                          return "Provide at least 8 characters";
-                        }
-                        return null;
-                      },
-                    ),
+                    passwordTextFormField(context),
                     SizedBox(height: 24),
                     Visibility(
                       visible: _loginInProgress == false,
@@ -90,37 +53,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     SizedBox(height: 15),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (builder) => ForgetPasswordScreen(),
-                          ),
-                        );
-                      },
-                      child: Text(
-                        "Forgot Password",
-                        style: Theme.of(context).textTheme.bodySmall,
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("Don't have an account?"),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (builder) => SignupScreen(),
-                              ),
-                            );
-                          },
-                          child: Text("SignUp"),
-                        ),
-                      ],
-                    ),
+                    forgetPasswordTextButton(context),
+                    singUpTextButton(context),
                   ],
                 ),
               ),
@@ -128,6 +62,78 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  Row singUpTextButton(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text("Don't have an account?"),
+        TextButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (builder) => SignupScreen()),
+            );
+          },
+          child: Text("SignUp"),
+        ),
+      ],
+    );
+  }
+
+  TextButton forgetPasswordTextButton(BuildContext context) {
+    return TextButton(
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (builder) => ForgetPasswordScreen()),
+        );
+      },
+      child: Text(
+        "Forgot Password",
+        style: Theme.of(context).textTheme.bodySmall,
+      ),
+    );
+  }
+
+  TextFormField passwordTextFormField(BuildContext context) {
+    return TextFormField(
+      textInputAction: TextInputAction.done,
+      obscureText: true,
+      decoration: InputDecoration(
+        hint: Text("Password", style: Theme.of(context).textTheme.titleSmall),
+      ),
+      controller: _passwordTEController,
+      validator: (value) {
+        if (value?.isEmpty ?? true) {
+          return "Provide Password";
+        } else if (value!.length < 8) {
+          return "Provide at least 8 characters";
+        }
+        return null;
+      },
+    );
+  }
+
+  TextFormField emailTextFormField(BuildContext context) {
+    return TextFormField(
+      textInputAction: TextInputAction.next,
+      keyboardType: TextInputType.emailAddress,
+      decoration: InputDecoration(
+        hint: Text("Email", style: Theme.of(context).textTheme.titleSmall),
+      ),
+      controller: _emailTEController,
+      validator: (value) {
+        if (value == null ||
+            value.trim().isEmpty ||
+            !EmailValidator.validate(value)) {
+          return "Provide Valid Email Address";
+        }
+
+        return null;
+      },
     );
   }
 
@@ -150,8 +156,6 @@ class _LoginScreenState extends State<LoginScreen> {
         showSnackMessage(context, "Logged in Success");
         Get.offAll(() => MainBottomNavScreen());
       } else {
-        // print("entered into else condition");
-        // print(result.errorMessage);
         showSnackMessage(
           // ignore: use_build_context_synchronously
           context,
@@ -160,5 +164,12 @@ class _LoginScreenState extends State<LoginScreen> {
         );
       }
     }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _emailTEController.dispose();
+    _passwordTEController.dispose();
   }
 }

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce/presentation/state_holders/operation_state.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -59,12 +60,46 @@ class AuthController {
 
         // 2. Update the password
         await user.updatePassword(newPassword);
-        print("Password updated successfully.");
+        // print("Password updated successfully.");
         return OperationState("Password updated successfully.");
       } on FirebaseAuthException catch (e) {
-        print("Error: ${e.message}");
+        // print("Error: ${e.message}");
+        return OperationState(e.message, isFailed: true);
       }
     }
     return OperationState("Account not Found", isFailed: true);
+  }
+
+  static Future<OperationState> userEmailVerification() async {
+    final user = FirebaseAuth.instance.currentUser!;
+    try {
+      await user.sendEmailVerification();
+      return OperationState("A Link has been set to ${user.email}");
+    } catch (e) {
+      return OperationState("${user.email} not found");
+    }
+  }
+
+  static Future<String> get userInformation async {
+    try {
+      final userAuthData = FirebaseAuth.instance.currentUser;
+
+      if (userAuthData == null) return '-1';
+
+      final querySnapshot = await FirebaseFirestore.instance
+          .collection('user')
+          .where('user_auth_id', isEqualTo: userAuthData.uid)
+          .limit(1)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        final data = querySnapshot.docs.first.data();
+        return data['mobile']?.toString() ?? '';
+      }
+
+      return '';
+    } catch (e) {
+      return '';
+    }
   }
 }

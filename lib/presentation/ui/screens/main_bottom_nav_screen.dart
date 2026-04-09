@@ -2,7 +2,7 @@ import 'package:ecommerce/presentation/controller/auth_controller.dart';
 import 'package:ecommerce/presentation/state_holders/main_bottom_nav_controller.dart';
 import 'package:ecommerce/presentation/ui/screens/authentication/login_screen.dart';
 import 'package:ecommerce/presentation/ui/screens/cart/cart_screen.dart';
-import 'package:ecommerce/presentation/ui/screens/categorie/category_screen.dart';
+import 'package:ecommerce/presentation/ui/screens/category/category_screen.dart';
 import 'package:ecommerce/presentation/ui/screens/home/home_screen.dart';
 import 'package:ecommerce/presentation/ui/screens/menu/menu_screen.dart';
 import 'package:ecommerce/presentation/ui/screens/wishlist/wishlist_screen.dart';
