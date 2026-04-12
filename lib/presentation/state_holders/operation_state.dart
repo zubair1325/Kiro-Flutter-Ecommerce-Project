@@ -1,5 +1,5 @@
 class OperationState {
-  bool isFailed = false;
+  bool? isFailed;
   String? message;
-  OperationState(this.message, {isFailed});
+  OperationState(this.message, {this.isFailed = false});
 }

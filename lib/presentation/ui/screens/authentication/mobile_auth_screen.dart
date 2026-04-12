@@ -1,7 +1,8 @@
 import 'package:ecommerce/presentation/controller/auth_controller.dart';
-import 'package:ecommerce/presentation/ui/screens/authentication/nid_verification.dart';
+import 'package:ecommerce/presentation/ui/screens/menu/seller/nid_verification.dart';
 import 'package:ecommerce/presentation/ui/screens/authentication/otp_verify_screen.dart';
 import 'package:ecommerce/presentation/ui/screens/main_bottom_nav_screen.dart';
+import 'package:ecommerce/presentation/ui/screens/menu/seller/store_name_screen.dart';
 import 'package:ecommerce/presentation/ui/utility/snack_message.dart';
 import 'package:ecommerce/presentation/ui/widgets/app_logo.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -102,14 +103,14 @@ class _MobileAuthScreenState extends State<MobileAuthScreen> {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (_) => const NidVerification()),
+          MaterialPageRoute(builder: (_) => StoreNameScreen()),
         );
       });
     }
   }
 
   Future<void> _loadUserMobile() async {
-    final mobile = await AuthController.userInformation;
+    final mobile = await AuthController.userMobileNumber;
     if (mounted) {
       _mobileNumberTEController.text = mobile;
     }

@@ -33,7 +33,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
         backgroundColor: AppColors.primaryColor,
         foregroundColor: Colors.white,
         leading: IconButton(
-          onPressed: () => Get.offAll(LoginState()),
+          onPressed: () => Navigator.pop(context),
           icon: const Icon(Icons.arrow_back_ios),
         ),
         title: const Text(
@@ -91,17 +91,23 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
         _currentPasswordTEController.text,
         _confirmNewPasswordTEController.text,
       );
-
-      if (!operationState.isFailed) {
+      if (operationState.isFailed!) {
+        showSnackMessage(
+          // ignore: use_build_context_synchronously
+          context,
+          operationState.message ?? "Unknown error on singUp_screen",
+          operationState.isFailed!,
+        );
+      } else {
+        showSnackMessage(
+          // ignore: use_build_context_synchronously
+          context,
+          operationState.message ?? "Unknown error on singUp_screen",
+          
+        );
         await AuthController.singOut();
         Get.offAll(LoginScreen());
       }
-      showSnackMessage(
-        // ignore: use_build_context_synchronously
-        context,
-        operationState.message ?? "Unknown error on singUp_screen",
-        operationState.isFailed,
-      );
     }
     changePasswordProgress = false;
     if (mounted) {

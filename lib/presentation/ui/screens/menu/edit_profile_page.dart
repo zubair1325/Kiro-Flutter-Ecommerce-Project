@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ecommerce/data/cloud_preset.dart';
+import 'package:ecommerce/data/cloudnary/cloud_preset.dart';
 import 'package:ecommerce/data/cloudnary/image_upload.dart';
 import 'package:ecommerce/presentation/ui/screens/authentication/email_auth_screen.dart';
 import 'package:ecommerce/presentation/ui/utility/snack_message.dart';
@@ -129,7 +129,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       // ignore: use_build_context_synchronously
       // print(widget.isKiroSeller);
       widget.isKiroSeller!
-          ? Navigator.push(
+          ? Navigator.pushReplacement(
               // ignore: use_build_context_synchronously
               context,
               MaterialPageRoute(builder: (_) => EmailAuthScreen()),

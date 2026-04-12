@@ -1,6 +1,7 @@
 import 'dart:async';
-import 'package:ecommerce/presentation/ui/screens/authentication/nid_verification.dart';
+import 'package:ecommerce/presentation/ui/screens/menu/seller/nid_verification.dart';
 import 'package:ecommerce/presentation/ui/screens/menu/login_state.dart';
+import 'package:ecommerce/presentation/ui/screens/menu/seller/store_name_screen.dart';
 import 'package:ecommerce/presentation/ui/utility/app_colors.dart';
 import 'package:ecommerce/presentation/ui/utility/snack_message.dart';
 import 'package:ecommerce/presentation/ui/widgets/app_logo.dart';
@@ -180,7 +181,7 @@ class _OtpVerifyScreenState extends State<OtpVerifyScreen> {
         // ignore: use_build_context_synchronously
         showSnackMessage(context, "Phone Number Linked Successfully");
 
-        Get.offAll(() => const NidVerification());
+        Get.offAll(() => const StoreNameScreen());
       } else {
         showSnackMessage(context, "User not logged in", true);
       }

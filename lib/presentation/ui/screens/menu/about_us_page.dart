@@ -1,8 +1,5 @@
-import 'package:ecommerce/presentation/ui/screens/menu/login_state.dart';
 import 'package:ecommerce/presentation/ui/utility/app_colors.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_navigation/src/extension_navigation.dart';
 
 class AboutUsPage extends StatelessWidget {
   const AboutUsPage({super.key});
@@ -13,8 +10,18 @@ class AboutUsPage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: AppColors.primaryColor,
         foregroundColor: Colors.white,
-        leading: IconButton(onPressed: ()=>Get.offAll(LoginState()), icon: Icon(Icons.arrow_back_ios),),
-        title: const Text("About Us", style: TextStyle(color: Colors.white,fontWeight: FontWeight.w800,fontSize: 25)),
+        leading: IconButton(
+          onPressed: () => Navigator.pop(context),
+          icon: Icon(Icons.arrow_back_ios),
+        ),
+        title: const Text(
+          "About Us",
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w800,
+            fontSize: 25,
+          ),
+        ),
         centerTitle: true,
       ),
       body: SingleChildScrollView(

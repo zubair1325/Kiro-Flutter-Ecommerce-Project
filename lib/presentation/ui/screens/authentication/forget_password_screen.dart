@@ -101,7 +101,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
         // ignore: use_build_context_synchronously
         context,
         operationState.message!,
-        operationState.isFailed,
+        operationState.isFailed!,
       );
       Get.to(AuthWrapper());
     }

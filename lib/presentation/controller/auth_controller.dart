@@ -80,7 +80,7 @@ class AuthController {
     }
   }
 
-  static Future<String> get userInformation async {
+  static Future<String> get userMobileNumber async {
     try {
       final userAuthData = FirebaseAuth.instance.currentUser;
 
@@ -102,4 +102,48 @@ class AuthController {
       return '';
     }
   }
+
+  static Future<Map<String, dynamic>?> get userInformation async {
+    try {
+      final userAuthData = FirebaseAuth.instance.currentUser;
+
+      if (userAuthData == null) return null;
+
+      final querySnapshot = await FirebaseFirestore.instance
+          .collection('user')
+          .where('user_auth_id', isEqualTo: userAuthData.uid)
+          .limit(1)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        return querySnapshot.docs.first.data();
+      }
+
+      return null;
+    } catch (e) {
+      return null;
+    }
+  }
+  static Future<Map<String, dynamic>?> get sellerInformation async {
+    try {
+      final userAuthData = FirebaseAuth.instance.currentUser;
+
+      if (userAuthData == null) return null;
+
+      final querySnapshot = await FirebaseFirestore.instance
+          .collection('seller')
+          .where('user_auth_id', isEqualTo: userAuthData.uid)
+          .limit(1)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        return querySnapshot.docs.first.data();
+      }
+
+      return null;
+    } catch (e) {
+      return null;
+    }
+  }
 }
+

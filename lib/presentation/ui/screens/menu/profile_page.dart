@@ -1,10 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce/presentation/ui/screens/menu/edit_profile_page.dart';
-import 'package:ecommerce/presentation/ui/screens/menu/login_state.dart';
 import 'package:ecommerce/presentation/ui/utility/app_colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -18,7 +16,7 @@ class ProfilePage extends StatelessWidget {
         backgroundColor: AppColors.primaryColor,
         foregroundColor: Colors.white,
         leading: IconButton(
-          onPressed: () => Get.offAll(LoginState()),
+          onPressed: () => Navigator.pop(context),
           icon: const Icon(Icons.arrow_back_ios),
         ),
         title: const Text("My Profile"),
@@ -26,7 +24,7 @@ class ProfilePage extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.edit),
             onPressed: () {
-              Navigator.push(
+              Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (_) => EditProfilePage()),
               );

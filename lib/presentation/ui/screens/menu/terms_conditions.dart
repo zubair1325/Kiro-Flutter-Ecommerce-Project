@@ -1,7 +1,5 @@
-import 'package:ecommerce/presentation/ui/screens/menu/login_state.dart';
 import 'package:ecommerce/presentation/ui/utility/app_colors.dart';
 import 'package:flutter/material.dart';
-import 'package:get/route_manager.dart';
 
 class TermsConditions extends StatelessWidget {
   const TermsConditions({super.key});
@@ -12,8 +10,18 @@ class TermsConditions extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: AppColors.primaryColor,
         foregroundColor: Colors.white,
-        leading: IconButton(onPressed: ()=>Get.offAll(LoginState()), icon: Icon(Icons.arrow_back_ios),),
-        title: const Text("B2B Terms & Conditions",style: TextStyle(color: Colors.white,fontWeight: FontWeight.w800,fontSize: 25),),
+        leading: IconButton(
+          onPressed: () => Navigator.pop(context),
+          icon: Icon(Icons.arrow_back_ios),
+        ),
+        title: const Text(
+          "B2B Terms & Conditions",
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w800,
+            fontSize: 25,
+          ),
+        ),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -100,10 +108,7 @@ class _TermsSection extends StatelessWidget {
   final String title;
   final String content;
 
-  const _TermsSection({
-    required this.title,
-    required this.content,
-  });
+  const _TermsSection({required this.title, required this.content});
 
   @override
   Widget build(BuildContext context) {
@@ -114,16 +119,10 @@ class _TermsSection extends StatelessWidget {
         children: [
           Text(
             title,
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
-          Text(
-            content,
-            style: const TextStyle(fontSize: 14),
-          ),
+          Text(content, style: const TextStyle(fontSize: 14)),
         ],
       ),
     );

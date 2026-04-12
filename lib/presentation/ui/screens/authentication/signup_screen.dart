@@ -1,4 +1,4 @@
-import 'package:ecommerce/data/users/user_information.dart';
+import 'package:ecommerce/data/model/user_information.dart';
 import 'package:ecommerce/presentation/controller/auth_wrapper.dart';
 import 'package:ecommerce/presentation/ui/screens/authentication/login_screen.dart';
 import 'package:ecommerce/presentation/ui/utility/app_colors.dart';
@@ -289,7 +289,7 @@ class _SignupScreenState extends State<SignupScreen> {
         // ignore: use_build_context_synchronously
         context,
         operationState.message ?? "Unknown error on singUp_screen",
-        operationState.isFailed,
+        operationState.isFailed!,
       );
       Get.offAll(AuthWrapper());
     }
