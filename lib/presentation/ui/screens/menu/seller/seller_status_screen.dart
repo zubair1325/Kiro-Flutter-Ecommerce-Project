@@ -41,9 +41,7 @@ class _SellerStatusScreenState extends State<SellerStatusScreen> {
 
   Future<void> openPdf(String url) async {
     final uri = Uri.parse(url);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri);
-    }
+    await launchUrl(uri);
   }
 
   @override
@@ -90,7 +88,10 @@ class _SellerStatusScreenState extends State<SellerStatusScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                 Text("Account Active",style: TextStyle(color: AppColors.primaryColor,fontSize: 18),),
+                Text(
+                  "Account Active",
+                  style: TextStyle(color: AppColors.primaryColor, fontSize: 18),
+                ),
                 Switch(
                   activeThumbColor: AppColors.primaryColor,
                   value: isActive,

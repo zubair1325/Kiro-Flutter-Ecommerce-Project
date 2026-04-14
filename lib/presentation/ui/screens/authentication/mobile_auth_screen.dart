@@ -1,5 +1,4 @@
 import 'package:ecommerce/presentation/controller/auth_controller.dart';
-import 'package:ecommerce/presentation/ui/screens/menu/seller/nid_verification.dart';
 import 'package:ecommerce/presentation/ui/screens/authentication/otp_verify_screen.dart';
 import 'package:ecommerce/presentation/ui/screens/main_bottom_nav_screen.dart';
 import 'package:ecommerce/presentation/ui/screens/menu/seller/store_name_screen.dart';

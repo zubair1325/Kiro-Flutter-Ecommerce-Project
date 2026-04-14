@@ -57,27 +57,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                     ),
 
                     SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("Don't have an account?"),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                builder: (builder) => SignupScreen(),
-                              ),
-                              (predicate) => false,
-                            );
-                          },
-                          child: Text(
-                            "SignUp",
-                            style: TextStyle(color: AppColors.primaryColor),
-                          ),
-                        ),
-                      ],
-                    ),
+                    singUpTextButton(context),
                   ],
                 ),
               ),
@@ -85,6 +65,28 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  Row singUpTextButton(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text("Don't have an account?"),
+        TextButton(
+          onPressed: () {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (builder) => SignupScreen()),
+              (predicate) => false,
+            );
+          },
+          child: Text(
+            "SignUp",
+            style: TextStyle(color: AppColors.primaryColor),
+          ),
+        ),
+      ],
     );
   }
 

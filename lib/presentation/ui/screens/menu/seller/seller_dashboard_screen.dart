@@ -1,10 +1,10 @@
-import 'package:ecommerce/presentation/ui/screens/menu/admin/add_category_screen.dart';
-import 'package:ecommerce/presentation/ui/screens/menu/admin/all_seller_list_screen.dart';
-import 'package:ecommerce/presentation/ui/screens/menu/admin/seller_request_list_screen.dart';
+import 'package:ecommerce/presentation/ui/screens/menu/seller/add_product_dynamic_screen.dart';
+import 'package:ecommerce/presentation/ui/screens/menu/seller/seller_product_list_screen.dart';
+import 'package:ecommerce/presentation/ui/screens/menu/seller/seller_status_screen.dart';
 import 'package:flutter/material.dart';
 
-class AdminHomeScreen extends StatelessWidget {
-  const AdminHomeScreen({super.key});
+class SellerDashboardScreen extends StatelessWidget {
+  const SellerDashboardScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +14,7 @@ class AdminHomeScreen extends StatelessWidget {
         elevation: 0,
         backgroundColor: Colors.white,
         title: const Text(
-          "Admin Dashboard",
+          "Seller Dashboard",
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
@@ -24,36 +24,36 @@ class AdminHomeScreen extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-
+            /// ================= PRODUCT SECTION =================
             _SingleSection(
               title: "Product Management",
               children: [
                 _buildOptionCard(
                   context,
-                  title: "Product Categories",
-                  subtitle: "Product categories and sub categories",
+                  title: "View My Products",
+                  subtitle: "Browse all products of my store",
                   icon: Icons.category_outlined,
                   color: Colors.blue,
                   onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => const SellerRequestListScreen(),
+                        builder: (_) => const SellerProductListScreen(),
                       ),
                     );
                   },
                 ),
                 _buildOptionCard(
                   context,
-                  title: "Add Product Categories",
-                  subtitle: "Product categories and sub categories",
+                  title: "Add Product",
+                  subtitle: "Add New Product to My Store",
                   icon: Icons.add_box_outlined,
                   color: Colors.blue,
                   onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => const AddCategoryScreen(),
+                        builder: (_) => const AddProductDynamicScreen(),
                       ),
                     );
                   },
@@ -63,13 +63,15 @@ class AdminHomeScreen extends StatelessWidget {
 
             const SizedBox(height: 16),
 
-
+            /// ================= ACCOUNT SECTION =================
+            ///
+            ///
             _SingleSection(
-              title: "Seller Management",
+              title: "Account Management",
               children: [
                 _buildOptionCard(
                   context,
-                  title: "Seller Requests",
+                  title: "Seller Account Status",
                   subtitle: "Approve or reject seller applications",
                   icon: Icons.storefront_outlined,
                   color: Colors.blue,
@@ -77,36 +79,11 @@ class AdminHomeScreen extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => const SellerRequestListScreen(),
+                        builder: (_) => const SellerStatusScreen(),
                       ),
                     );
                   },
                 ),
-                const SizedBox(height: 12),
-                _buildOptionCard(
-                  context,
-                  title: "All Sellers",
-                  subtitle: "View all active sellers",
-                  icon: Icons.people_alt_outlined,
-                  color: Colors.green,
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => const AllSellerListScreen(),
-                      ),
-                    );
-                  },
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 16),
-
-
-            _SingleSection(
-              title: "Account Management",
-              children: [
                 _buildOptionCard(
                   context,
                   title: "Account Deactivation",
@@ -191,7 +168,7 @@ class AdminHomeScreen extends StatelessWidget {
   }
 }
 
-
+/// ================= SECTION WIDGET =================
 class _SingleSection extends StatelessWidget {
   final String? title;
   final List<Widget> children;

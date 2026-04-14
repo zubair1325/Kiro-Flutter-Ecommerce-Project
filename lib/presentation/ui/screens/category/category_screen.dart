@@ -15,6 +15,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
   Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
+      // ignore: deprecated_member_use
       onPopInvoked: (value) async {
         Get.find<MainBottomNavController>().bacToHome();
       },

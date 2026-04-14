@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:ecommerce/data/cloudnary/cloud_preset.dart';
 import 'package:file_picker/file_picker.dart';
@@ -34,19 +33,19 @@ Future<void> uploadPDF() async {
 
     // 5. Handle response
     if (response.statusCode == 200) {
-      final responseData = await response.stream.toBytes();
-      final responseString = String.fromCharCodes(responseData);
-      final jsonMap = jsonDecode(responseString);
+      //final responseData = await response.stream.toBytes();
+      //final responseString = String.fromCharCodes(responseData);
+      //final jsonMap = jsonDecode(responseString);
 
-      String fileUrl = jsonMap['secure_url'];
+      //String fileUrl = jsonMap['secure_url'];
 
-      print("PDF Uploaded Successfully");
-      print("📎 URL: $fileUrl");
+      // print("PDF Uploaded Successfully");
+      // print("📎 URL: $fileUrl");
 
     } else {
-      print("Upload failed: ${response.statusCode}");
+     // print("Upload failed: ${response.statusCode}");
     }
   } catch (e) {
-    print(" Error: $e");
+    //print(" Error: $e");
   }
 }

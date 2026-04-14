@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:ecommerce/presentation/ui/screens/menu/seller/nid_verification.dart';
 import 'package:ecommerce/presentation/ui/screens/menu/login_state.dart';
 import 'package:ecommerce/presentation/ui/screens/menu/seller/store_name_screen.dart';
 import 'package:ecommerce/presentation/ui/utility/app_colors.dart';

@@ -8,7 +8,7 @@ import 'package:ecommerce/presentation/ui/screens/menu/about_us_page.dart';
 import 'package:ecommerce/presentation/ui/screens/menu/admin/admin_home_screen.dart';
 import 'package:ecommerce/presentation/ui/screens/menu/edit_profile_page.dart';
 import 'package:ecommerce/presentation/ui/screens/menu/profile_page.dart';
-import 'package:ecommerce/presentation/ui/screens/menu/seller/seller_status_screen.dart';
+import 'package:ecommerce/presentation/ui/screens/menu/seller/seller_dashboard_screen.dart';
 import 'package:ecommerce/presentation/ui/screens/menu/terms_conditions.dart';
 import 'package:ecommerce/presentation/ui/utility/app_colors.dart';
 import 'package:flutter/cupertino.dart';
@@ -134,12 +134,13 @@ class _LoginStateState extends State<LoginState> {
                                 sellerData['user_auth_id'] == null)
                             ? const SizedBox.shrink()
                             : _CustomListTile(
-                                title: "Seller Status",
+                                title: "Seller",
                                 icon: Icons.shop,
                                 onTap: () => Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (builder) => SellerStatusScreen(),
+                                    builder: (builder) =>
+                                        SellerDashboardScreen(),
                                   ),
                                 ),
                               ),
@@ -193,7 +194,7 @@ class _LoginStateState extends State<LoginState> {
                           title: "Delete Account",
                           icon: Icons.delete_forever,
                           onTap: () async {
-                            print(sellerData!['user_auth_id']);
+                           // print(sellerData!['user_auth_id']);
                           },
                         ),
                       ],

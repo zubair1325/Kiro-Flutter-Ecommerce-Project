@@ -100,7 +100,7 @@ class _StoreNameScreenState extends State<StoreNameScreen> {
       }
       return true;
     } catch (e) {
-      print(e);
+      //print(e);
       return false;
     }
   }

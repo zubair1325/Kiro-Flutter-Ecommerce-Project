@@ -1,6 +1,5 @@
 import 'package:ecommerce/presentation/controller/auth_controller.dart';
 import 'package:ecommerce/presentation/ui/screens/authentication/login_screen.dart';
-import 'package:ecommerce/presentation/ui/screens/menu/login_state.dart';
 import 'package:ecommerce/presentation/ui/utility/app_colors.dart';
 import 'package:ecommerce/presentation/ui/utility/snack_message.dart';
 import 'package:ecommerce/presentation/ui/widgets/app_logo.dart';
