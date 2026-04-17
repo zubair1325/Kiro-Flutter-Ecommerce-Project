@@ -2,8 +2,8 @@
 
 import 'package:ecommerce/presentation/controller/auth_controller.dart';
 import 'package:ecommerce/presentation/controller/auth_wrapper.dart';
+import 'package:ecommerce/presentation/state_holders/main_bottom_nav_controller.dart';
 import 'package:ecommerce/presentation/ui/screens/authentication/change_password_screen.dart';
-import 'package:ecommerce/presentation/ui/screens/home/home_screen.dart';
 import 'package:ecommerce/presentation/ui/screens/menu/about_us_page.dart';
 import 'package:ecommerce/presentation/ui/screens/menu/admin/admin_home_screen.dart';
 import 'package:ecommerce/presentation/ui/screens/menu/edit_profile_page.dart';
@@ -13,6 +13,7 @@ import 'package:ecommerce/presentation/ui/screens/menu/terms_conditions.dart';
 import 'package:ecommerce/presentation/ui/utility/app_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:get/route_manager.dart';
 
 class LoginState extends StatefulWidget {
@@ -31,7 +32,10 @@ class _LoginStateState extends State<LoginState> {
       child: Scaffold(
         appBar: AppBar(
           leading: IconButton(
-            onPressed: () => Get.offAll(HomeScreen()),
+            onPressed: () {
+              Get.find<MainBottomNavController>().bacToHome();
+              Get.back();
+            },
             icon: const Icon(Icons.arrow_back_ios),
           ),
           title: const Text("Settings"),
@@ -194,7 +198,7 @@ class _LoginStateState extends State<LoginState> {
                           title: "Delete Account",
                           icon: Icons.delete_forever,
                           onTap: () async {
-                           // print(sellerData!['user_auth_id']);
+                            // print(sellerData!['user_auth_id']);
                           },
                         ),
                       ],

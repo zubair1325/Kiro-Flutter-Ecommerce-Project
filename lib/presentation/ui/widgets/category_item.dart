@@ -5,36 +5,59 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 
 class CategoryItem extends StatelessWidget {
-  const CategoryItem({super.key});
+  final String name;
+
+  const CategoryItem({super.key, required this.name});
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return InkWell(
+      borderRadius: BorderRadius.circular(18),
       onTap: () {
-        Get.to(() => ProductListScreen(category: "Electronics"));
+        Get.to(() => ProductListScreen(category: name));
       },
-      child: Column(
-        children: [
-          Card(
-            color: AppColors.primaryColor.withAlpha(60),
-            child: const Padding(
-              padding: EdgeInsets.all(24.0),
-              child: Icon(
-                Icons.computer,
-                size: 32,
-                color: AppColors.primaryColor,
+      child: Ink(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              AppColors.primaryColor.withOpacity(0.12),
+              AppColors.primaryColor.withOpacity(0.04),
+            ],
+          ),
+          borderRadius: BorderRadius.circular(18),
+        ),
+        child: Stack(
+          children: [
+            Positioned(
+              right: -20,
+              bottom: -20,
+              child: Container(
+                height: 80,
+                width: 80,
+                decoration: BoxDecoration(
+                  color: AppColors.primaryColor.withOpacity(0.08),
+                  shape: BoxShape.circle,
+                ),
               ),
             ),
-          ),
-          Text(
-            "Electronics",
-            style: TextStyle(
-              fontSize: 16,
-              color: AppColors.primaryColor,
-              fontWeight: FontWeight.w500,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  name,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black87,
+                  ),
+                ),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

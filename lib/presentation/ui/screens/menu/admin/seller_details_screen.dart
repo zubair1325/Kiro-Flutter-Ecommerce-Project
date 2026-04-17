@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ecommerce/data/firebase/collection_holder.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -14,19 +15,16 @@ class SellerDetailsScreen extends StatelessWidget {
 
   Future<Map<String, dynamic>> getAllData() async {
     final sellerDoc = await FirebaseFirestore.instance
-        .collection('seller')
+        .collection(CollectionHolder.seller)
         .doc(sellerDocId)
         .get();
 
     final userQuery = await FirebaseFirestore.instance
-        .collection('user')
+        .collection(CollectionHolder.user)
         .where('user_auth_id', isEqualTo: userAuthId)
         .get();
 
-    return {
-      'seller': sellerDoc.data(),
-      'user': userQuery.docs.first.data(),
-    };
+    return {'seller': sellerDoc.data(), 'user': userQuery.docs.first.data()};
   }
 
   Future<void> openNid(String url) async {
@@ -38,10 +36,7 @@ class SellerDetailsScreen extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 8, top: 16),
       child: Text(
         title,
-        style: const TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
-        ),
+        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
       ),
     );
   }
@@ -56,8 +51,7 @@ class SellerDetailsScreen extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Text("$label: ",
-              style: const TextStyle(fontWeight: FontWeight.bold)),
+          Text("$label: ", style: const TextStyle(fontWeight: FontWeight.bold)),
           Expanded(child: Text(value)),
         ],
       ),
@@ -104,25 +98,28 @@ class SellerDetailsScreen extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),
 
                 /// User Info
                 buildSectionTitle("Owner Information"),
-                buildInfoTile("Name",
-                    "${user['first_name']} ${user['last_name']}"),
+                buildInfoTile(
+                  "Name",
+                  "${user['first_name']} ${user['last_name']}",
+                ),
                 buildInfoTile("Email", user['email_address']),
                 buildInfoTile("Phone", user['mobile']),
                 buildInfoTile("City", user['city']),
 
                 /// Seller Info
                 buildSectionTitle("Seller Information"),
-                buildInfoTile("Account Active",
-                    seller['account_active_status'].toString()),
                 buildInfoTile(
-                    "Rejected", seller['is_rejected'].toString()),
+                  "Account Active",
+                  seller['account_active_status'].toString(),
+                ),
+                buildInfoTile("Rejected", seller['is_rejected'].toString()),
 
                 const SizedBox(height: 20),
 

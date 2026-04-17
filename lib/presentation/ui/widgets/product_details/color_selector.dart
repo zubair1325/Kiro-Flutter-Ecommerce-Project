@@ -3,7 +3,11 @@ import 'package:flutter/material.dart';
 class ColorSelector extends StatefulWidget {
   final List<Color>? allColors;
   final Function(Color) onChange;
-  const ColorSelector({super.key,required this.allColors, required this.onChange});
+  const ColorSelector({
+    super.key,
+    required this.allColors,
+    required this.onChange,
+  });
 
   @override
   State<ColorSelector> createState() => _ColorSelectorState();
@@ -15,7 +19,9 @@ class _ColorSelectorState extends State<ColorSelector> {
   @override
   void initState() {
     super.initState();
-    _selectedColor = widget.allColors!.first;
+    _selectedColor = widget.allColors != null && widget.allColors!.isNotEmpty
+        ? widget.allColors!.first
+        : Colors.grey;
   }
 
   @override

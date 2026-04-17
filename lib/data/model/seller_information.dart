@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ecommerce/data/firebase/collection_holder.dart';
 import 'package:ecommerce/presentation/state_holders/operation_state.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -31,7 +32,7 @@ class SellerInformation {
 
   static Future<OperationState> addData(SellerInformation user) async {
     try {
-      FirebaseFirestore.instance.collection('seller').add(user.toMap());
+      FirebaseFirestore.instance.collection(CollectionHolder.seller).add(user.toMap());
       return OperationState("Requested Submitted Successfully");
     } catch (e) {
       return OperationState("Operation Failed", isFailed: false);

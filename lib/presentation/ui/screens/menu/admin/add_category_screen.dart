@@ -11,7 +11,8 @@ class AddCategoryScreen extends StatefulWidget {
 class _AddCategoryScreenState extends State<AddCategoryScreen> {
   final TextEditingController categoryController = TextEditingController();
   final TextEditingController subCategoryController = TextEditingController();
-  final TextEditingController subSubCategoryController = TextEditingController();
+  final TextEditingController subSubCategoryController =
+      TextEditingController();
 
   List<Map<String, dynamic>> fields = [];
 
@@ -30,7 +31,6 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
       fields[index]["options"].add(TextEditingController());
     });
   }
-
 
   Future<void> saveCategory() async {
     List<Map<String, dynamic>> finalFields = [];
@@ -60,14 +60,17 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
       "sub_category": subCategoryController.text.trim(),
       "sub_sub_category": subSubCategoryController.text.trim(),
 
-
       "fields": finalFields,
 
       "system_fields": {
         "product_name": true,
         "price": true,
         "quantity": true,
-        "images": true, 
+        "images": true,
+        "rating": true,
+        'colors': true,
+        "description": true,
+        'sizes': true,
       },
 
       "created_at": Timestamp.now(),
@@ -77,7 +80,6 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
     Navigator.pop(context);
   }
 
- 
   Widget buildFieldCard(int index) {
     final field = fields[index];
 
@@ -92,7 +94,7 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
             // ignore: deprecated_member_use
             color: Colors.black.withOpacity(0.04),
             blurRadius: 8,
-          )
+          ),
         ],
       ),
       child: Column(
@@ -102,9 +104,7 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
               Expanded(
                 child: TextField(
                   controller: field["label_controller"],
-                  decoration: const InputDecoration(
-                    labelText: "Field Name",
-                  ),
+                  decoration: const InputDecoration(labelText: "Field Name"),
                 ),
               ),
               IconButton(
@@ -114,7 +114,7 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
                   });
                 },
                 icon: const Icon(Icons.close, color: Colors.red),
-              )
+              ),
             ],
           ),
 
@@ -158,7 +158,7 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
                         });
                       },
                       icon: const Icon(Icons.delete, color: Colors.red),
-                    )
+                    ),
                   ],
                 );
               }),
@@ -175,15 +175,11 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF4F6FA),
-      appBar: AppBar(
-        title: const Text("Add Category"),
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: const Text("Add Category"), centerTitle: true),
       body: Column(
         children: [
           Expanded(
@@ -197,8 +193,7 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
                     children: [
                       _inputField(categoryController, "Category"),
                       _inputField(subCategoryController, "Sub Category"),
-                      _inputField(
-                          subSubCategoryController, "Sub Sub Category"),
+                      _inputField(subSubCategoryController, "Sub Sub Category"),
                     ],
                   ),
 
@@ -207,7 +202,8 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
                     title: "System Fields",
                     children: const [
                       _InfoText(
-                          "Product Name, Price, Quantity and Multiple Images will be automatically added by the system."),
+                        "Product Name, Price, Quantity, Ratings, Sizes, Description and Multiple Images will be automatically added by the system.",
+                      ),
                     ],
                   ),
 
@@ -238,12 +234,11 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
               ),
               child: const Text("Save Category"),
             ),
-          )
+          ),
         ],
       ),
     );
   }
-
 
   Widget _sectionCard({required String title, required List<Widget> children}) {
     return Container(
@@ -255,11 +250,12 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title,
-              style:
-                  const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          Text(
+            title,
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
           const SizedBox(height: 10),
-          ...children
+          ...children,
         ],
       ),
     );
@@ -274,15 +270,12 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
           labelText: label,
           filled: true,
           fillColor: Colors.grey.shade100,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
         ),
       ),
     );
   }
 }
-
 
 class _InfoText extends StatelessWidget {
   final String text;

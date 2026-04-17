@@ -4,7 +4,6 @@ import 'package:ecommerce/presentation/ui/widgets/app_bar_logo.dart';
 import 'package:ecommerce/presentation/ui/widgets/category_item.dart';
 import 'package:ecommerce/presentation/ui/widgets/home/circle_icon_button.dart';
 import 'package:ecommerce/presentation/ui/widgets/home/image_carousel.dart';
-import 'package:ecommerce/presentation/ui/widgets/product_card_item.dart';
 import 'package:ecommerce/presentation/ui/widgets/home/section_title.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -72,7 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
         primary: true,
         scrollDirection: Axis.horizontal,
         itemBuilder: (context, index) {
-          return CategoryItem();
+          return CategoryItem(name: "Electronics");
         },
         separatorBuilder: (BuildContext context, int index) {
           return SizedBox(width: 10);
@@ -90,7 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
         primary: true,
         scrollDirection: Axis.horizontal,
         itemBuilder: (context, index) {
-          return ProductCardItem();
+          //return ProductCardItem();
         },
         separatorBuilder: (BuildContext context, int index) {
           return SizedBox(width: 10);

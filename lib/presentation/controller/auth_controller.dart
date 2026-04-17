@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ecommerce/data/firebase/collection_holder.dart';
 import 'package:ecommerce/presentation/state_holders/operation_state.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -87,7 +88,7 @@ class AuthController {
       if (userAuthData == null) return '-1';
 
       final querySnapshot = await FirebaseFirestore.instance
-          .collection('user')
+          .collection(CollectionHolder.user)
           .where('user_auth_id', isEqualTo: userAuthData.uid)
           .limit(1)
           .get();
@@ -110,7 +111,7 @@ class AuthController {
       if (userAuthData == null) return null;
 
       final querySnapshot = await FirebaseFirestore.instance
-          .collection('user')
+          .collection(CollectionHolder.user)
           .where('user_auth_id', isEqualTo: userAuthData.uid)
           .limit(1)
           .get();
@@ -124,6 +125,7 @@ class AuthController {
       return null;
     }
   }
+
   static Future<Map<String, dynamic>?> get sellerInformation async {
     try {
       final userAuthData = FirebaseAuth.instance.currentUser;
@@ -131,7 +133,7 @@ class AuthController {
       if (userAuthData == null) return null;
 
       final querySnapshot = await FirebaseFirestore.instance
-          .collection('seller')
+          .collection(CollectionHolder.seller)
           .where('user_auth_id', isEqualTo: userAuthData.uid)
           .limit(1)
           .get();
@@ -146,4 +148,3 @@ class AuthController {
     }
   }
 }
-

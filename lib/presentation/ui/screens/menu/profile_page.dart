@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ecommerce/data/firebase/collection_holder.dart';
 import 'package:ecommerce/presentation/ui/screens/menu/edit_profile_page.dart';
 import 'package:ecommerce/presentation/ui/utility/app_colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -111,7 +112,7 @@ class ProfilePage extends StatelessWidget {
     // print(userAuthData);
 
     final querySnapshot = await FirebaseFirestore.instance
-        .collection('user')
+        .collection(CollectionHolder.user)
         .where('user_auth_id', isEqualTo: userAuthData?.uid)
         .get();
 

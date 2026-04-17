@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ecommerce/data/firebase/collection_holder.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -23,7 +24,7 @@ class _SellerRequestDetailsScreenState
 
   Future<Map<String, dynamic>?> getUserData() async {
     final query = await FirebaseFirestore.instance
-        .collection('user')
+        .collection(CollectionHolder.user)
         .where('user_auth_id', isEqualTo: widget.userAuthId)
         .get();
 
@@ -34,7 +35,7 @@ class _SellerRequestDetailsScreenState
 
   Future<Map<String, dynamic>?> getSellerData() async {
     final doc = await FirebaseFirestore.instance
-        .collection('seller')
+        .collection(CollectionHolder.seller)
         .doc(widget.sellerDocId)
         .get();
 
@@ -47,11 +48,11 @@ class _SellerRequestDetailsScreenState
     final batch = FirebaseFirestore.instance.batch();
 
     final sellerRef = FirebaseFirestore.instance
-        .collection('seller')
+        .collection(CollectionHolder.seller)
         .doc(widget.sellerDocId);
 
     final userQuery = await FirebaseFirestore.instance
-        .collection('user')
+        .collection(CollectionHolder.user)
         .where('user_auth_id', isEqualTo: widget.userAuthId)
         .get();
 
@@ -62,9 +63,7 @@ class _SellerRequestDetailsScreenState
       'seller_status': true,
     });
 
-    batch.update(userRef, {
-      'is_seller': true,
-    });
+    batch.update(userRef, {'is_seller': true});
 
     await batch.commit();
 
@@ -77,11 +76,9 @@ class _SellerRequestDetailsScreenState
     setState(() => isLoading = true);
 
     await FirebaseFirestore.instance
-        .collection('seller')
+        .collection(CollectionHolder.seller)
         .doc(widget.sellerDocId)
-        .update({
-      'is_rejected': true,
-    });
+        .update({'is_rejected': true});
 
     setState(() => isLoading = false);
     // ignore: use_build_context_synchronously
@@ -112,7 +109,9 @@ class _SellerRequestDetailsScreenState
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("Name: ${userData['first_name']} ${userData['last_name']}"),
+                Text(
+                  "Name: ${userData['first_name']} ${userData['last_name']}",
+                ),
                 Text("Email: ${userData['email_address']}"),
                 Text("Phone: ${userData['mobile']}"),
                 Text("City: ${userData['city']}"),
@@ -133,7 +132,8 @@ class _SellerRequestDetailsScreenState
                       Expanded(
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.green),
+                            backgroundColor: Colors.green,
+                          ),
                           onPressed: approveSeller,
                           child: const Text("Approve"),
                         ),
@@ -142,13 +142,14 @@ class _SellerRequestDetailsScreenState
                       Expanded(
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.red),
+                            backgroundColor: Colors.red,
+                          ),
                           onPressed: rejectSeller,
                           child: const Text("Reject"),
                         ),
                       ),
                     ],
-                  )
+                  ),
               ],
             ),
           );

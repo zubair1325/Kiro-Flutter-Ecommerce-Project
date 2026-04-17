@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ecommerce/data/firebase/collection_holder.dart';
 import 'package:ecommerce/presentation/ui/screens/menu/admin/seller_request_details_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -11,7 +12,7 @@ class SellerRequestListScreen extends StatelessWidget {
       appBar: AppBar(title: const Text("Seller Requests")),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
-            .collection('seller')
+            .collection(CollectionHolder.seller)
             .where('seller_status', isEqualTo: false)
             .where('is_rejected', isEqualTo: false)
             .snapshots(),
@@ -35,7 +36,7 @@ class SellerRequestListScreen extends StatelessWidget {
 
               return FutureBuilder<QuerySnapshot>(
                 future: FirebaseFirestore.instance
-                    .collection('user')
+                    .collection(CollectionHolder.user)
                     .where('user_auth_id', isEqualTo: userAuthId)
                     .get(),
                 builder: (context, userSnapshot) {

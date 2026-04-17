@@ -19,7 +19,9 @@ class _SizeSelectorState extends State<SizeSelector> {
   @override
   void initState() {
     super.initState();
-    _selectedSize = widget.allSize!.first;
+    _selectedSize = widget.allSize != null && widget.allSize!.isNotEmpty
+        ? widget.allSize!.first
+        : null;
   }
 
   @override
@@ -51,7 +53,6 @@ class _SizeSelectorState extends State<SizeSelector> {
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w700,
-                          
                         ),
                       ),
                     ),

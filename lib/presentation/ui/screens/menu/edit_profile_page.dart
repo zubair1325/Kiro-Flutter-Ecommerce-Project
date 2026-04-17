@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce/data/cloudnary/cloud_preset.dart';
 import 'package:ecommerce/data/cloudnary/image_upload.dart';
+import 'package:ecommerce/data/firebase/collection_holder.dart';
 import 'package:ecommerce/presentation/ui/screens/authentication/email_auth_screen.dart';
 import 'package:ecommerce/presentation/ui/utility/snack_message.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -85,7 +86,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     final user = FirebaseAuth.instance.currentUser;
 
     final query = await FirebaseFirestore.instance
-        .collection('user')
+        .collection(CollectionHolder.user)
         .where('user_auth_id', isEqualTo: user?.uid)
         .get();
 
@@ -114,7 +115,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       }
 
       await FirebaseFirestore.instance
-          .collection('user')
+          .collection(CollectionHolder.user)
           .doc(userDocId)
           .update({
             "first_name": firstNameController.text.trim(),

@@ -24,6 +24,9 @@ class _AddProductDynamicScreenState extends State<AddProductDynamicScreen> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController priceController = TextEditingController();
   final TextEditingController quantityController = TextEditingController();
+  final TextEditingController colorController = TextEditingController();
+  final TextEditingController descriptionController = TextEditingController();
+  final TextEditingController sizesController = TextEditingController();
 
   /// DYNAMIC FIELDS
   Map<String, dynamic> formData = {};
@@ -34,7 +37,6 @@ class _AddProductDynamicScreenState extends State<AddProductDynamicScreen> {
 
   bool isLoading = false;
 
-  /// ================= LOAD CATEGORY =================
   Future<void> loadCategory(String docId) async {
     final doc = await FirebaseFirestore.instance
         .collection("categories")
@@ -48,7 +50,6 @@ class _AddProductDynamicScreenState extends State<AddProductDynamicScreen> {
     });
   }
 
-  /// ================= IMAGE UPLOAD =================
   Future<void> uploadImage() async {
     final picker = ImagePicker();
     final XFile? image = await picker.pickImage(source: ImageSource.gallery);
@@ -63,8 +64,7 @@ class _AddProductDynamicScreenState extends State<AddProductDynamicScreen> {
       final url = Uri.parse('https://api.cloudinary.com/v1_1/dxaj5s787/upload');
 
       final request = http.MultipartRequest('POST', url)
-        ..fields['upload_preset'] = CloudPreset
-            .productPreset // 🔴 CHANGE THIS
+        ..fields['upload_preset'] = CloudPreset.productPreset
         ..files.add(await http.MultipartFile.fromPath('file', file.path));
 
       final response = await request.send();
@@ -89,6 +89,8 @@ class _AddProductDynamicScreenState extends State<AddProductDynamicScreen> {
     final userId = FirebaseAuth.instance.currentUser!.uid;
     if (nameController.text.isEmpty ||
         priceController.text.isEmpty ||
+        colorController.text.isEmpty ||
+        descriptionController.text.isEmpty ||
         imageUrls.isEmpty) {
       ScaffoldMessenger.of(
         context,
@@ -106,6 +108,10 @@ class _AddProductDynamicScreenState extends State<AddProductDynamicScreen> {
       "price": double.tryParse(priceController.text.trim()) ?? 0,
       "quantity": int.tryParse(quantityController.text.trim()) ?? 0,
       "images": imageUrls,
+      "colors": colorController.text.trim(),
+      "description": descriptionController.text.trim(),
+      "sizes": sizesController.text.trim(),
+      'rating':0.0,
 
       /// CATEGORY
       "category_id": selectedCategoryId,
@@ -114,7 +120,6 @@ class _AddProductDynamicScreenState extends State<AddProductDynamicScreen> {
 
       /// DYNAMIC
       "attributes": formData,
-
       "created_at": Timestamp.now(),
     });
 
@@ -123,7 +128,6 @@ class _AddProductDynamicScreenState extends State<AddProductDynamicScreen> {
     Navigator.pop(context);
   }
 
-  /// ================= BUILD FIELD =================
   Widget buildField(Map<String, dynamic> field) {
     final label = field["label"];
     final type = field["type"];
@@ -171,7 +175,6 @@ class _AddProductDynamicScreenState extends State<AddProductDynamicScreen> {
     );
   }
 
-  /// ================= IMAGE GRID =================
   Widget buildImageGrid() {
     return Wrap(
       spacing: 10,
@@ -223,7 +226,6 @@ class _AddProductDynamicScreenState extends State<AddProductDynamicScreen> {
     );
   }
 
-  /// ================= UI =================
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -275,6 +277,9 @@ class _AddProductDynamicScreenState extends State<AddProductDynamicScreen> {
                           "Quantity",
                           isNumber: true,
                         ),
+                        _textInput(colorController, "Colors"),
+                        _textInput(sizesController, "Sizes (Optional)"),
+                        _textInput(descriptionController, "Description"),
 
                         const SizedBox(height: 10),
 

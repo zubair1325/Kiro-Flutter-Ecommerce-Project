@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ecommerce/data/firebase/collection_holder.dart';
 import 'package:ecommerce/presentation/ui/screens/menu/admin/seller_details_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -12,7 +13,7 @@ class AllSellerListScreen extends StatelessWidget {
       appBar: AppBar(title: const Text("All Sellers"), centerTitle: true),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
-            .collection('seller')
+            .collection(CollectionHolder.seller)
             .where('account_active_status', isEqualTo: true)
             .snapshots(),
         builder: (context, snapshot) {
@@ -36,7 +37,7 @@ class AllSellerListScreen extends StatelessWidget {
 
               return FutureBuilder<QuerySnapshot>(
                 future: FirebaseFirestore.instance
-                    .collection('user')
+                    .collection(CollectionHolder.user)
                     .where('user_auth_id', isEqualTo: userAuthId)
                     .get(),
                 builder: (context, userSnapshot) {

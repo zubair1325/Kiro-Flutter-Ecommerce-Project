@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ecommerce/data/firebase/collection_holder.dart';
 import 'package:ecommerce/presentation/state_holders/operation_state.dart';
 
 class UserInformation {
@@ -21,7 +22,6 @@ class UserInformation {
     this.mobile,
     this.shippingAddress,
     this.password,
-    
   );
 
   Map<String, dynamic> toMap() {
@@ -41,7 +41,9 @@ class UserInformation {
 
   static Future<OperationState> addData(UserInformation user) async {
     try {
-      FirebaseFirestore.instance.collection('user').add(user.toMap());
+      FirebaseFirestore.instance
+          .collection(CollectionHolder.user)
+          .add(user.toMap());
       return OperationState("Account Created Successfully");
     } catch (e) {
       return OperationState("New Account Creation Failed", isFailed: false);

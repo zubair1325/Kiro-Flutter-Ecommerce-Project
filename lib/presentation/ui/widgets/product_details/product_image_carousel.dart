@@ -3,7 +3,8 @@ import 'package:ecommerce/presentation/ui/utility/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class ProductImageCarousel extends StatefulWidget {
-  const ProductImageCarousel({super.key, this.height});
+  final List<dynamic> images;
+  const ProductImageCarousel({super.key, this.height, required this.images});
   final double? height;
 
   @override
@@ -12,6 +13,7 @@ class ProductImageCarousel extends StatefulWidget {
 
 class _ProductImageCarouselState extends State<ProductImageCarousel> {
   final ValueNotifier<int> _indexNotifier = ValueNotifier(0);
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -20,27 +22,35 @@ class _ProductImageCarouselState extends State<ProductImageCarousel> {
           options: CarouselOptions(
             viewportFraction: 1,
             height: widget.height ?? 220.0,
-            // autoPlay: true,
             onPageChanged: (index, reason) {
               _indexNotifier.value = index;
             },
           ),
-          items: [1, 2, 3, 4, 5].map((i) {
+          items: widget.images.map((img) {
             return Builder(
               builder: (BuildContext context) {
                 return Container(
-                  width: MediaQuery.of(context).size.width,
-                  margin: EdgeInsets.symmetric(horizontal: 5.0),
+                  width: double.infinity,
+                  margin: const EdgeInsets.symmetric(horizontal: 5.0),
                   decoration: BoxDecoration(
-                    color: Colors.grey,
+                    color: Colors.grey.shade200,
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: Text('text $i', style: TextStyle(fontSize: 16.0)),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Image.network(
+                      img,
+                      width: double.infinity,
+                      height: double.infinity,
+                      fit: BoxFit.contain, // 🔥 FIXED
+                    ),
+                  ),
                 );
               },
             );
           }).toList(),
         ),
+
         Positioned(
           bottom: 10,
           left: 0,
@@ -51,13 +61,15 @@ class _ProductImageCarouselState extends State<ProductImageCarousel> {
               return Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  for (int i = 0; i < 5; i++)
+                  for (int i = 0; i < widget.images.length; i++)
                     Container(
-                      height: 12,
-                      width: 12,
-                      
+                      margin: const EdgeInsets.symmetric(horizontal: 3),
+                      height: 10,
+                      width: 10,
                       decoration: BoxDecoration(
-                        color: i == value ? AppColors.primaryColor : Colors.white,
+                        color: i == value
+                            ? AppColors.primaryColor
+                            : Colors.white,
                         border: Border.all(
                           color: i == value
                               ? AppColors.primaryColor

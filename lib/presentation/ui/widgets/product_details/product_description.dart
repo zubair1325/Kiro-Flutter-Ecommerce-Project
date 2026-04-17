@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class ProductDescription extends StatefulWidget {
-  const ProductDescription({super.key});
+  final String description;
+  const ProductDescription({super.key, required this.description});
 
   @override
   State<ProductDescription> createState() => _ProductDescriptionState();
@@ -9,34 +10,61 @@ class ProductDescription extends StatefulWidget {
 
 class _ProductDescriptionState extends State<ProductDescription> {
   bool isShowDetails = false;
+  bool isOverflowing = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _checkTextOverflow();
+  }
+
+  void _checkTextOverflow() {
+    final textSpan = TextSpan(
+      text: widget.description,
+      style: const TextStyle(fontSize: 13),
+    );
+
+    final textPainter = TextPainter(
+      text: textSpan,
+      maxLines: 5,
+      textDirection: TextDirection.ltr,
+    );
+
+    textPainter.layout(maxWidth: MediaQuery.of(context).size.width);
+
+    setState(() {
+      isOverflowing = textPainter.didExceedMaxLines;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          style: TextStyle(
-            fontSize: 13,
-            color: Colors.grey,
-            overflow: isShowDetails
-                ? TextOverflow.visible
-                : TextOverflow.ellipsis,
-          ),
+          widget.description,
+          style: const TextStyle(fontSize: 13, color: Colors.grey),
           maxLines: isShowDetails ? null : 5,
-          "If the [style] argument is null, the text will use the style from the closest enclosing [DefaultTextStyle].f the [style] argument is null, the text will use the style from the closest enclosing [DefaultTextStyle The [overflow] property's behavior is affected by the [softWrap] argument. If the [softWrap] is true or null, the glyph causing overflow, and those that follow, will not be rendered. Otherwise, it will be shown with the given overflow option. If the [style] argument is null, the text will use the style from the closest enclosing [DefaultTextStyle].f the [style] argument is null, the text will use the style from the closest enclosing [DefaultTextStyle The [overflow] property's behavior is affected by the [softWrap] argument. If the [softWrap] is true or null, the glyph causing overflow, and those that follow, will not be rendered. Otherwise, it will be shown with the given overflow option. If the [style] argument is null, the text will use the style from the closest enclosing [DefaultTextStyle].f the [style] argument is null, the text will use the style from the closest enclosing [DefaultTextStyle The [overflow] property's behavior is affected by the [softWrap] argument. If the [softWrap] is true or null, the glyph causing overflow, and those that follow, will not be rendered. Otherwise, it will be shown with the given overflow option. If the [style] argument is null, the text will use the style from the closest enclosing [DefaultTextStyle].f the [style] argument is null, the text will use the style from the closest enclosing [DefaultTextStyle The [overflow] property's behavior is affected by the [softWrap] argument. If the [softWrap] is true or null, the glyph causing overflow, and those that follow, will not be rendered. Otherwise, it will be shown with the given overflow option. If the [style] argument is null, the text will use the style from the closest enclosing [DefaultTextStyle].f the [style] argument is null, the text will use the style from the closest enclosing [DefaultTextStyle The [overflow] property's behavior is affected by the [softWrap] argument. If the [softWrap] is true or null, the glyph causing overflow, and those that follow, will not be rendered. Otherwise, it will be shown with the given overflow option. If the [style] argument is null, the text will use the style from the closest enclosing [DefaultTextStyle].f the [style] argument is null, the text will use the style from the closest enclosing [DefaultTextStyle The [overflow] property's behavior is affected by the [softWrap] argument. If the [softWrap] is true or null, the glyph causing overflow, and those that follow, will not be rendered. Otherwise, it will be shown with the given overflow option. If the [style] argument is null, the text will use the style from the closest enclosing [DefaultTextStyle].f the [style] argument is null, the text will use the style from the closest enclosing [DefaultTextStyle The [overflow] property's behavior is affected by the [softWrap] argument. If the [softWrap] is true or null, the glyph causing overflow, and those that follow, will not be rendered. Otherwise, it will be shown with the given overflow option. If the [style] argument is null, the text will use the style from the closest enclosing [DefaultTextStyle].f the [style] argument is null, the text will use the style from the closest enclosing [DefaultTextStyle The [overflow] property's behavior is affected by the [softWrap] argument. If the [softWrap] is true or null, the glyph causing overflow, and those that follow, will not be rendered. Otherwise, it will be shown with the given overflow option. If the [style] argument is null, the text will use the style from the closest enclosing [DefaultTextStyle].f the [style] argument is null, the text will use the style from the closest enclosing [DefaultTextStyle The [overflow] property's behavior is affected by the [softWrap] argument. If the [softWrap] is true or null, the glyph causing overflow, and those that follow, will not be rendered. Otherwise, it will be shown with the given overflow option. If the [style] argument is null, the text will use the style from the closest enclosing [DefaultTextStyle].f the [style] argument is null, the text will use the style from the closest enclosing [DefaultTextStyle The [overflow] property's behavior is affected by the [softWrap] argument. If the [softWrap] is true or null, the glyph causing overflow, and those that follow, will not be rendered. Otherwise, it will be shown with the given overflow option.",
+          overflow: isShowDetails
+              ? TextOverflow.visible
+              : TextOverflow.ellipsis,
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            TextButton(
-              onPressed: () {
-                setState(() {
-                  isShowDetails = !isShowDetails;
-                });
-              },
-              child: isShowDetails ? Text("Show Less") : Text("Show More"),
-            ),
-          ],
-        ),
+
+        if (isOverflowing)
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              TextButton(
+                onPressed: () {
+                  setState(() {
+                    isShowDetails = !isShowDetails;
+                  });
+                },
+                child: Text(isShowDetails ? "Show Less" : "Show More"),
+              ),
+            ],
+          ),
       ],
     );
   }
