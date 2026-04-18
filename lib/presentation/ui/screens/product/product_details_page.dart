@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce/data/firebase/collection_holder.dart';
 import 'package:ecommerce/presentation/state_holders/main_bottom_nav_controller.dart';
+import 'package:ecommerce/presentation/ui/screens/product/product_list_screen.dart';
 import 'package:ecommerce/presentation/ui/utility/app_colors.dart';
 import 'package:ecommerce/presentation/ui/utility/snack_message.dart';
 import 'package:ecommerce/presentation/ui/widgets/product_details/color_parser.dart';
@@ -25,6 +26,7 @@ class ProductDetailsPage extends StatefulWidget {
 class _ProductDetailsPageState extends State<ProductDetailsPage> {
   Color? selectedColor;
   String? selectedSize;
+
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +81,13 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
           SizedBox(height: 8),
           InkWell(
             onTap: () {
-              print("working");
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (builder) =>
+                      ProductListScreen(sellerId: product['seller_id']),
+                ),
+              );
             },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -207,7 +215,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
         InkWell(
           borderRadius: BorderRadius.circular(6),
           onTap: () async {
-            addToWishlist();
+            await toggleWishlist();
           },
           child: Card(
             shape: RoundedRectangleBorder(
@@ -334,32 +342,42 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
     );
   }
 
-  Future<void> addToWishlist() async {
+  Future<bool> toggleWishlist() async {
     try {
       final user = FirebaseAuth.instance.currentUser;
-      if (user == null) {
-        return;
-      }
+      if (user == null) return false;
+
       final productId = widget.product['id'];
 
-      await FirebaseFirestore.instance
+      final docRef = FirebaseFirestore.instance
           .collection(CollectionHolder.wishlist)
           .doc(user.uid)
           .collection('items')
-          .doc(productId)
-          .set({
-            'product_id': productId,
-            'name': widget.product['product_name'],
-            'image': widget.product['images'][0],
-            'price': widget.product['price'],
-            'added_at': FieldValue.serverTimestamp(),
-          });
+          .doc(productId);
 
-      // ignore: use_build_context_synchronously
-      showSnackMessage(context, "Added to wishlist");
+      final doc = await docRef.get();
+
+      if (doc.exists) {
+        await docRef.delete();
+        // ignore: use_build_context_synchronously
+        showSnackMessage(context, "Removed from wishlist");
+        return false;
+      } else {
+        await docRef.set({
+          'product_id': productId,
+          'name': widget.product['product_name'],
+          'image': widget.product['images'][0],
+          'price': widget.product['price'],
+          'added_at': FieldValue.serverTimestamp(),
+        });
+        // ignore: use_build_context_synchronously
+        showSnackMessage(context, "Added to wishlist");
+        return true;
+      }
     } catch (e) {
       // ignore: use_build_context_synchronously
-      showSnackMessage(context, "Failed to add on  wishlist", true);
+      showSnackMessage(context, "Something went wrong", true);
+      return false;
     }
   }
 
