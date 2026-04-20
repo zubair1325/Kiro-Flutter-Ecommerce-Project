@@ -19,6 +19,9 @@ class ProductCardItem extends StatelessWidget {
     final name = product['product_name'] ?? product['name'] ?? 'No Name';
     final price = product['price'] ?? 0;
     final rating = product['rating'] ?? 0;
+    final discountPrice = product['discount_price'];
+    final hasDiscount =
+        product['is_discount_active'] == true && discountPrice != null;
 
     return InkWell(
       borderRadius: BorderRadius.circular(16),
@@ -67,14 +70,40 @@ class ProductCardItem extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        Text(
-                          "\$${price.toString()}",
-                          style: const TextStyle(
-                            color: AppColors.primaryColor,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 12,
-                          ),
-                        ),
+                        hasDiscount
+                            ? Column(
+                                children: [
+                                  /// ORIGINAL PRICE (STRIKETHROUGH)
+                                  Text(
+                                    "৳${price.toString()}",
+                                    style: const TextStyle(
+                                      color: Colors.grey,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 12,
+                                      decoration: TextDecoration.lineThrough,
+                                      decorationColor: Colors.black,
+                                    ),
+                                  ),
+
+                                  /// DISCOUNT PRICE
+                                  Text(
+                                    "৳${discountPrice.toString()}",
+                                    style: const TextStyle(
+                                      color: AppColors.primaryColor,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : Text(
+                                "৳${price.toString()}",
+                                style: const TextStyle(
+                                  color: AppColors.primaryColor,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 12,
+                                ),
+                              ),
                         Wrap(
                           crossAxisAlignment: WrapCrossAlignment.center,
                           children: [

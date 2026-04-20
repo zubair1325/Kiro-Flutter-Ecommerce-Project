@@ -118,7 +118,9 @@ class _ProductListScreenState extends State<ProductListScreen> {
         CollectionHolder.products,
       );
 
-      // Apply filters
+      /// -------------------------
+      /// APPLY FILTERS
+      /// -------------------------
       if (widget.category != null) {
         query = query.where('category', isEqualTo: widget.category);
       }
@@ -127,7 +129,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
         query = query.where('seller_id', isEqualTo: widget.sellerId);
       }
 
-      // Handle new arrival
+      /// NEW ARRIVAL
       if (widget.productSection == 'new_arrival') {
         final last7Days = DateTime.now().subtract(const Duration(days: 7));
 
@@ -141,11 +143,49 @@ class _ProductListScreenState extends State<ProductListScreen> {
 
       final snapshot = await query.get();
 
+      final now = DateTime.now();
+
       final products = snapshot.docs.map((doc) {
         return {'id': doc.id, ...doc.data()};
       }).toList();
 
-      // Apply in-memory sorting
+      /// -------------------------
+      /// DISCOUNT PROCESSING LOGIC
+      /// -------------------------
+      for (var product in products) {
+        final bool hasDiscount =
+            product['is_discount_active'] == true &&
+            product['discount_percent'] != null &&
+            product['price'] != null;
+
+        if (hasDiscount) {
+          final Timestamp? endTimestamp = product['discount_end'];
+
+          if (endTimestamp != null) {
+            final endTime = endTimestamp.toDate();
+
+            /// EXPIRED DISCOUNT → AUTO DISABLE
+            if (now.isAfter(endTime)) {
+              product['is_discount_active'] = false;
+              product['discount_price'] = null;
+              product['discount_percent'] = null;
+            } else {
+              /// ACTIVE DISCOUNT → CALCULATE PRICE
+              final price = (product['price'] ?? 0).toDouble();
+              final discountPercent = (product['discount_percent'] ?? 0)
+                  .toDouble();
+
+              final discountedPrice = price - (price * discountPercent / 100);
+
+              product['discount_price'] = discountedPrice;
+            }
+          }
+        }
+      }
+
+      /// -------------------------
+      /// POPULAR PRODUCTS SORT
+      /// -------------------------
       if (widget.productSection == 'popular') {
         products.sort((a, b) {
           final orderA = a['order_count'] ?? 0;
@@ -162,13 +202,18 @@ class _ProductListScreenState extends State<ProductListScreen> {
         });
       }
 
+      /// -------------------------
+      /// SPECIAL DISCOUNT SORT
+      /// -------------------------
       if (widget.productSection == 'special') {
         double getDiscount(Map item) {
           final percent = item['discount_percent'];
           final discountPrice = item['discount_price'];
           final price = item['price'] ?? 0;
 
-          if (percent != null) return percent.toDouble();
+          if (percent != null) {
+            return percent.toDouble();
+          }
 
           if (discountPrice != null && price != 0) {
             return ((price - discountPrice) / price) * 100;
@@ -185,4 +230,78 @@ class _ProductListScreenState extends State<ProductListScreen> {
       return [];
     }
   }
+
+  // Future<List<Map<String, dynamic>>> findProductList() async {
+  //   try {
+  //     Query<Map<String, dynamic>> query = FirebaseFirestore.instance.collection(
+  //       CollectionHolder.products,
+  //     );
+
+  //     // Apply filters
+  //     if (widget.category != null) {
+  //       query = query.where('category', isEqualTo: widget.category);
+  //     }
+
+  //     if (widget.sellerId != null) {
+  //       query = query.where('seller_id', isEqualTo: widget.sellerId);
+  //     }
+
+  //     // Handle new arrival
+  //     if (widget.productSection == 'new_arrival') {
+  //       final last7Days = DateTime.now().subtract(const Duration(days: 7));
+
+  //       query = query
+  //           .where(
+  //             'created_at',
+  //             isGreaterThanOrEqualTo: Timestamp.fromDate(last7Days),
+  //           )
+  //           .orderBy('created_at', descending: true);
+  //     }
+
+  //     final snapshot = await query.get();
+
+  //     final products = snapshot.docs.map((doc) {
+  //       return {'id': doc.id, ...doc.data()};
+  //     }).toList();
+
+  //     // Apply in-memory sorting
+  //     if (widget.productSection == 'popular') {
+  //       products.sort((a, b) {
+  //         final orderA = a['order_count'] ?? 0;
+  //         final orderB = b['order_count'] ?? 0;
+
+  //         if (orderA != orderB) {
+  //           return orderB.compareTo(orderA);
+  //         }
+
+  //         final ratingA = a['rating'] ?? 0;
+  //         final ratingB = b['rating'] ?? 0;
+
+  //         return ratingB.compareTo(ratingA);
+  //       });
+  //     }
+
+  //     if (widget.productSection == 'special') {
+  //       double getDiscount(Map item) {
+  //         final percent = item['discount_percent'];
+  //         final discountPrice = item['discount_price'];
+  //         final price = item['price'] ?? 0;
+
+  //         if (percent != null) return percent.toDouble();
+
+  //         if (discountPrice != null && price != 0) {
+  //           return ((price - discountPrice) / price) * 100;
+  //         }
+
+  //         return 0;
+  //       }
+
+  //       products.sort((a, b) => getDiscount(b).compareTo(getDiscount(a)));
+  //     }
+
+  //     return products;
+  //   } catch (e) {
+  //     return [];
+  //   }
+  // }
 }

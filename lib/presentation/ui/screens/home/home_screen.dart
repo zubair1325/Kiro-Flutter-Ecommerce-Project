@@ -3,11 +3,13 @@ import 'package:ecommerce/data/firebase/collection_holder.dart';
 import 'package:ecommerce/presentation/controller/auth_controller.dart';
 import 'package:ecommerce/presentation/state_holders/main_bottom_nav_controller.dart';
 import 'package:ecommerce/presentation/ui/screens/home/product_list_type.dart';
+import 'package:ecommerce/presentation/ui/screens/menu/profile_page.dart';
 import 'package:ecommerce/presentation/ui/screens/product/product_list_screen.dart';
 import 'package:ecommerce/presentation/ui/widgets/app_bar_logo.dart';
 import 'package:ecommerce/presentation/ui/widgets/category_item.dart';
 import 'package:ecommerce/presentation/ui/widgets/home/circle_icon_button.dart';
 import 'package:ecommerce/presentation/ui/widgets/home/image_carousel.dart';
+import 'package:ecommerce/presentation/ui/widgets/home/product_search_filter.dart';
 import 'package:ecommerce/presentation/ui/widgets/home/section_title.dart';
 import 'package:ecommerce/presentation/ui/widgets/product_card_item.dart';
 import 'package:flutter/material.dart';
@@ -32,6 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               const SizedBox(height: 10),
               searchTextField,
+              //ProductSearchFilter(),
               const SizedBox(height: 18),
               ImageCarousel(),
               const SizedBox(height: 18),
@@ -196,29 +199,37 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  TextFormField get searchTextField {
-    return TextFormField(
-      decoration: InputDecoration(
-        filled: true,
-        prefixIcon: Icon(Icons.search, color: Colors.grey),
-        border: OutlineInputBorder(
-          borderSide: BorderSide.none,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide.none,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide.none,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        errorBorder: OutlineInputBorder(
-          borderSide: BorderSide.none,
-          borderRadius: BorderRadius.circular(10),
-        ),
+  InkWell get searchTextField {
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (builder) => ProductSearchFilter()),
+        );
+      },
+      child: TextFormField(
+        decoration: InputDecoration(
+          filled: true,
+          prefixIcon: Icon(Icons.search, color: Colors.grey),
+          border: OutlineInputBorder(
+            borderSide: BorderSide.none,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide.none,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide.none,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderSide: BorderSide.none,
+            borderRadius: BorderRadius.circular(10),
+          ),
 
-        hint: Text("Search", style: Theme.of(context).textTheme.titleSmall),
+          hint: Text("Search", style: Theme.of(context).textTheme.titleSmall),
+        ),
       ),
     );
   }
@@ -228,7 +239,15 @@ class _HomeScreenState extends State<HomeScreen> {
       title: AppBarLogo(),
       actions: [
         AuthController.userLoginStatus
-            ? CircleIconButton(iconData: Icons.person, onTap: () {})
+            ? CircleIconButton(
+                iconData: Icons.person,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (builder) => ProfilePage()),
+                  );
+                },
+              )
             : SizedBox.shrink(),
         SizedBox(width: 15),
       ],
@@ -294,35 +313,73 @@ class _HomeScreenState extends State<HomeScreen> {
           .collection(CollectionHolder.products)
           .get();
 
+      final now = DateTime.now();
+
       final products = snapshot.docs.map((doc) {
         return {'id': doc.id, ...doc.data()};
       }).toList();
 
-      products.sort((a, b) {
-        double getDiscount(Map item) {
-          final percent = item['discount_percent'];
-          final discountPrice = item['discount_price'];
-          final price = item['price'] ?? 0;
+      /// -----------------------------
+      /// FILTER + CLEAN DISCOUNTS
+      /// -----------------------------
+      final validProducts = <Map<String, dynamic>>[];
 
-          // Priority 1: Use direct percentage if it exists
-          if (percent != null) return percent.toDouble();
+      for (var product in products) {
+        final bool isActive = product['is_discount_active'] == true;
 
-          // Priority 2: Calculate percentage from discount price
-          if (discountPrice != null && price != 0) {
-            return ((price - discountPrice) / price) * 100;
-          }
+        final Timestamp? endTimestamp = product['discount_end'];
 
-          return 0;
+        if (!isActive || endTimestamp == null) {
+          continue; // skip non-discount products
         }
 
-        // Sort descending (highest discount first)
-        return getDiscount(b).compareTo(getDiscount(a));
+        final endTime = endTimestamp.toDate();
+
+        /// ❌ EXPIRED DISCOUNT → SKIP (or optionally disable)
+        if (now.isAfter(endTime)) {
+          continue;
+        }
+
+        final price = (product['price'] ?? 0).toDouble();
+        final percent = (product['discount_percent'] ?? 0).toDouble();
+
+        double discountPercent = 0;
+
+        /// Priority 1: direct percent
+        if (product['discount_percent'] != null) {
+          discountPercent = percent;
+        }
+
+        /// Priority 2: fallback calculation (safe)
+        if (product['discount_price'] != null && price != 0) {
+          final discountPrice = product['discount_price'].toDouble();
+
+          discountPercent = ((price - discountPrice) / price) * 100;
+        }
+
+        /// attach computed values
+        product['computed_discount_percent'] = discountPercent;
+
+        product['discount_price'] = price - (price * discountPercent / 100);
+
+        validProducts.add(product);
+      }
+
+      /// -----------------------------
+      /// SORT BY HIGHEST DISCOUNT
+      /// -----------------------------
+      validProducts.sort((a, b) {
+        final aDiscount = a['computed_discount_percent'] ?? 0;
+        final bDiscount = b['computed_discount_percent'] ?? 0;
+
+        return bDiscount.compareTo(aDiscount);
       });
 
-      // Return only the top 10 most discounted items
-      return products.take(10).toList();
+      /// -----------------------------
+      /// RETURN TOP 10
+      /// -----------------------------
+      return validProducts.take(10).toList();
     } catch (e) {
-      //print("Error fetching special products: $e");
       return [];
     }
   }

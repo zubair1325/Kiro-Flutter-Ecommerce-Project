@@ -1,4 +1,5 @@
 import 'package:ecommerce/presentation/ui/screens/menu/admin/add_category_screen.dart';
+import 'package:ecommerce/presentation/ui/screens/menu/admin/admin_carousel_request_screen.dart';
 import 'package:ecommerce/presentation/ui/screens/menu/admin/all_seller_list_screen.dart';
 import 'package:ecommerce/presentation/ui/screens/menu/admin/seller_request_list_screen.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +25,6 @@ class AdminHomeScreen extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-
             _SingleSection(
               title: "Product Management",
               children: [
@@ -63,7 +63,6 @@ class AdminHomeScreen extends StatelessWidget {
 
             const SizedBox(height: 16),
 
-
             _SingleSection(
               title: "Seller Management",
               children: [
@@ -100,25 +99,48 @@ class AdminHomeScreen extends StatelessWidget {
                 ),
               ],
             ),
-
             const SizedBox(height: 16),
 
-
             _SingleSection(
-              title: "Account Management",
+              title: "CarouselSlider Ad",
               children: [
                 _buildOptionCard(
                   context,
-                  title: "Account Deactivation",
-                  subtitle: "Manage user deactivation requests",
-                  icon: Icons.person_off_outlined,
-                  color: Colors.red,
+                  title: "Add Request",
+                  subtitle: "Approve or reject seller applications",
+                  icon:
+                      Icons.playlist_add_check_circle_outlined, // Add Request,
+                  color: Colors.blue,
                   onTap: () {
-                    // Navigate later
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const AdminCarouselRequestScreen(),
+                      ),
+                    );
                   },
                 ),
+
+                const SizedBox(height: 12),
               ],
             ),
+            const SizedBox(height: 16),
+
+            // _SingleSection(
+            //   title: "Account Management",
+            //   children: [
+            //     _buildOptionCard(
+            //       context,
+            //       title: "Account Deactivation",
+            //       subtitle: "Manage user deactivation requests",
+            //       icon: Icons.person_off_outlined,
+            //       color: Colors.red,
+            //       onTap: () {
+            //         // Navigate later
+            //       },
+            //     ),
+            //   ],
+            // ),
           ],
         ),
       ),
@@ -190,7 +212,6 @@ class AdminHomeScreen extends StatelessWidget {
     );
   }
 }
-
 
 class _SingleSection extends StatelessWidget {
   final String? title;

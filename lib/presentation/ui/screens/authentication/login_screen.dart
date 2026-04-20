@@ -32,8 +32,8 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Center(
                 child: Column(
                   children: [
-                    SizedBox(height: 140),
-                    AppLogo(),
+                    SizedBox(height: 80),
+                    AppLogo(height: 80,),
                     SizedBox(height: 24),
                     Text(
                       "Welcome Back",

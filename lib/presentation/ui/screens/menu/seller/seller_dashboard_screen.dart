@@ -1,4 +1,6 @@
 import 'package:ecommerce/presentation/ui/screens/menu/seller/add_product_dynamic_screen.dart';
+import 'package:ecommerce/presentation/ui/screens/menu/seller/carousel_request_screen.dart';
+import 'package:ecommerce/presentation/ui/screens/menu/seller/product_discount_screen.dart';
 import 'package:ecommerce/presentation/ui/screens/menu/seller/seller_product_list_screen.dart';
 import 'package:ecommerce/presentation/ui/screens/menu/seller/seller_status_screen.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +34,7 @@ class SellerDashboardScreen extends StatelessWidget {
                   context,
                   title: "View My Products",
                   subtitle: "Browse all products of my store",
-                  icon: Icons.category_outlined,
+                  icon: Icons.inventory_2_outlined,
                   color: Colors.blue,
                   onTap: () {
                     Navigator.push(
@@ -47,13 +49,43 @@ class SellerDashboardScreen extends StatelessWidget {
                   context,
                   title: "Add Product",
                   subtitle: "Add New Product to My Store",
-                  icon: Icons.add_box_outlined,
+                  icon: Icons.add_circle_outline,
                   color: Colors.blue,
                   onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (_) => const AddProductDynamicScreen(),
+                      ),
+                    );
+                  },
+                ),
+                _buildOptionCard(
+                  context,
+                  title: "Advertise Store",
+                  subtitle: "Add New Product to My Store",
+                  icon: Icons.campaign_outlined,
+                  color: Colors.blue,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const CarouselRequestScreen(),
+                      ),
+                    );
+                  },
+                ),
+                _buildOptionCard(
+                  context,
+                  title: "Add Discount to Product",
+                  subtitle: "Add Discount  to Product in My Store",
+                  icon: Icons.local_offer_outlined,
+                  color: Colors.blue,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const ProductDiscountScreen(),
                       ),
                     );
                   },
@@ -66,36 +98,36 @@ class SellerDashboardScreen extends StatelessWidget {
             /// ================= ACCOUNT SECTION =================
             ///
             ///
-            _SingleSection(
-              title: "Account Management",
-              children: [
-                _buildOptionCard(
-                  context,
-                  title: "Seller Account Status",
-                  subtitle: "Approve or reject seller applications",
-                  icon: Icons.storefront_outlined,
-                  color: Colors.blue,
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => const SellerStatusScreen(),
-                      ),
-                    );
-                  },
-                ),
-                _buildOptionCard(
-                  context,
-                  title: "Account Deactivation",
-                  subtitle: "Manage user deactivation requests",
-                  icon: Icons.person_off_outlined,
-                  color: Colors.red,
-                  onTap: () {
-                    // Navigate later
-                  },
-                ),
-              ],
-            ),
+            // _SingleSection(
+            //   title: "Account Management",
+            //   children: [
+            //     _buildOptionCard(
+            //       context,
+            //       title: "Seller Account Status",
+            //       subtitle: "Approve or reject seller applications",
+            //       icon: Icons.storefront_outlined,
+            //       color: Colors.blue,
+            //       onTap: () {
+            //         Navigator.push(
+            //           context,
+            //           MaterialPageRoute(
+            //             builder: (_) => const SellerStatusScreen(),
+            //           ),
+            //         );
+            //       },
+            //     ),
+            //     _buildOptionCard(
+            //       context,
+            //       title: "Account Deactivation",
+            //       subtitle: "Manage user deactivation requests",
+            //       icon: Icons.person_off_outlined,
+            //       color: Colors.red,
+            //       onTap: () {
+            //         // Navigate later
+            //       },
+            //     ),
+            //   ],
+            // ),
           ],
         ),
       ),

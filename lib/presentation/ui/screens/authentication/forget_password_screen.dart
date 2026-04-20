@@ -31,12 +31,14 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
               child: Center(
                 child: Column(
                   children: [
-                    SizedBox(height: 160),
-                    AppLogo(width: 150),
+                    SizedBox(height: 80),
+                    AppLogo(width: 100),
                     SizedBox(height: 24),
                     Text(
                       "Recover Your Account",
-                      style: Theme.of(context).textTheme.titleLarge,
+                      style: Theme.of(
+                        context,
+                      ).textTheme.titleLarge!.copyWith(fontSize: 22),
                     ),
                     SizedBox(height: 5),
                     Text(

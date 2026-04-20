@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce/data/firebase/collection_holder.dart';
 import 'package:ecommerce/presentation/state_holders/main_bottom_nav_controller.dart';
+import 'package:ecommerce/presentation/ui/screens/product/checkout_screen.dart';
 import 'package:ecommerce/presentation/ui/utility/app_colors.dart';
 import 'package:ecommerce/presentation/ui/widgets/cart/cart_product_item.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -50,6 +51,7 @@ class _CartScreenState extends State<CartScreen> {
   Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
+      // ignore: deprecated_member_use
       onPopInvoked: (value) async {
         Get.find<MainBottomNavController>().bacToHome();
       },
@@ -64,49 +66,48 @@ class _CartScreenState extends State<CartScreen> {
           ),
           title: const Text("Cart"),
         ),
-        body: Column(
-          children: [
-            Expanded(
-              child: StreamBuilder<List<Map<String, dynamic>>>(
-                stream: getCartStream(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
+        body: StreamBuilder<List<Map<String, dynamic>>>(
+          stream: getCartStream(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
 
-                  final cartItems = snapshot.data ?? [];
+            final cartItems = snapshot.data ?? [];
 
-                  if (cartItems.isEmpty) {
-                    return const Center(child: Text("Cart is empty"));
-                  }
+            if (cartItems.isEmpty) {
+              return const Center(child: Text("Cart is empty"));
+            }
 
-                  final total = calculateTotal(cartItems);
+            final total = calculateTotal(cartItems);
 
-                  return Column(
-                    children: [
-                      Expanded(
-                        child: ListView.separated(
-                          itemCount: cartItems.length,
-                          separatorBuilder: (_, __) =>
-                              const SizedBox(height: 10),
-                          itemBuilder: (context, index) {
-                            return CartProductItem(product: cartItems[index]);
-                          },
-                        ),
-                      ),
-                      totalPriceAndCheckOutSection(total),
-                    ],
-                  );
-                },
-              ),
-            ),
-          ],
+            return Column(
+              children: [
+                Expanded(
+                  child: ListView.separated(
+                    itemCount: cartItems.length,
+                    // ignore: unnecessary_underscores
+                    separatorBuilder: (_, __) => const SizedBox(height: 10),
+                    itemBuilder: (context, index) {
+                      return CartProductItem(product: cartItems[index]);
+                    },
+                  ),
+                ),
+
+                totalPriceAndCheckOutSection(total, cartItems),
+              ],
+            );
+          },
         ),
       ),
     );
   }
 
-  Widget totalPriceAndCheckOutSection(double total) {
+  // ✅ FIXED: receive cartItems
+  Widget totalPriceAndCheckOutSection(
+    double total,
+    List<Map<String, dynamic>> cartItems,
+  ) {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.primaryColor.withAlpha(35),
@@ -131,7 +132,7 @@ class _CartScreenState extends State<CartScreen> {
                 ),
                 Text(
                   "৳${total.toStringAsFixed(2)}",
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w600,
                     color: AppColors.primaryColor,
@@ -139,10 +140,18 @@ class _CartScreenState extends State<CartScreen> {
                 ),
               ],
             ),
+
             SizedBox(
               width: 150,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: cartItems.isEmpty
+                    ? null
+                    : () {
+                        Get.to(
+                          () =>
+                              CheckoutScreen(items: cartItems, fromCart: true),
+                        );
+                      },
                 child: const Text("Check Out"),
               ),
             ),

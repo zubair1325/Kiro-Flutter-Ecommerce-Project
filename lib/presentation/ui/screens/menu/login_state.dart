@@ -80,18 +80,18 @@ class _LoginStateState extends State<LoginState> {
                             },
                           ),
                         ),
-                        const _CustomListTile(
-                          title: "Notifications",
-                          icon: Icons.notifications_none_rounded,
-                        ),
-                        _CustomListTile(
-                          title: "My Orders",
-                          icon: CupertinoIcons.cart,
-                        ),
-                        const _CustomListTile(
-                          title: "Security Status",
-                          icon: CupertinoIcons.lock_shield,
-                        ),
+                        // const _CustomListTile(
+                        //   title: "Notifications",
+                        //   icon: Icons.notifications_none_rounded,
+                        // ),
+                        // _CustomListTile(
+                        //   title: "My Orders",
+                        //   icon: CupertinoIcons.cart,
+                        // ),
+                        // const _CustomListTile(
+                        //   title: "Security Status",
+                        //   icon: CupertinoIcons.lock_shield,
+                        // ),
                       ],
                     ),
                     const Divider(),
@@ -110,7 +110,7 @@ class _LoginStateState extends State<LoginState> {
                         ),
                         _CustomListTile(
                           title: "Change Password",
-                          icon: Icons.password_sharp,
+                          icon: Icons.lock_outline,
                           onTap: () => Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -124,7 +124,7 @@ class _LoginStateState extends State<LoginState> {
                                 sellerData['user_auth_id'] == null)
                             ? _CustomListTile(
                                 title: "Kiro Seller",
-                                icon: Icons.shop,
+                                icon: Icons.storefront_outlined,
                                 onTap: () => Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -139,7 +139,7 @@ class _LoginStateState extends State<LoginState> {
                             ? const SizedBox.shrink()
                             : _CustomListTile(
                                 title: "Seller",
-                                icon: Icons.shop,
+                                icon: Icons.dashboard_customize_outlined,
                                 onTap: () => Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -152,7 +152,7 @@ class _LoginStateState extends State<LoginState> {
                         (userData != null && userData['is_admin'])
                             ? _CustomListTile(
                                 title: "Admin",
-                                icon: Icons.shop,
+                                icon: Icons.admin_panel_settings_outlined,
                                 onTap: () => Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -165,7 +165,9 @@ class _LoginStateState extends State<LoginState> {
                     ),
                     const Divider(),
                     _SingleSection(
+                      title: "About Kiro",
                       children: [
+                        
                         _CustomListTile(
                           title: "Help & Feedback",
                           icon: Icons.help_outline_rounded,
@@ -194,13 +196,13 @@ class _LoginStateState extends State<LoginState> {
                             Get.offAll(AuthWrapper());
                           },
                         ),
-                        _CustomListTile(
-                          title: "Delete Account",
-                          icon: Icons.delete_forever,
-                          onTap: () async {
-                            // print(sellerData!['user_auth_id']);
-                          },
-                        ),
+                        // _CustomListTile(
+                        //   title: "Delete Account",
+                        //   icon: Icons.delete_forever,
+                        //   onTap: () async {
+                        //     // print(sellerData!['user_auth_id']);
+                        //   },
+                        // ),
                       ],
                     ),
                   ],

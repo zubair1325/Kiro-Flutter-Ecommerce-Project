@@ -109,7 +109,10 @@ class _MobileAuthScreenState extends State<MobileAuthScreen> {
   }
 
   Future<void> _loadUserMobile() async {
-    final mobile = await AuthController.userMobileNumber;
+    String mobile = await AuthController.userMobileNumber;
+    if (!mobile.startsWith("+88")) {
+      mobile = "+88$mobile";
+    }
     if (mounted) {
       _mobileNumberTEController.text = mobile;
     }

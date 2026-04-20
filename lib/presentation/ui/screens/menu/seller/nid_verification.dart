@@ -1,4 +1,5 @@
 import 'package:ecommerce/data/model/seller_information.dart';
+import 'package:ecommerce/presentation/controller/auth_wrapper.dart';
 import 'package:ecommerce/presentation/ui/utility/snack_message.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
@@ -71,7 +72,12 @@ class _NidVerificationState extends State<NidVerification> {
                   onPressed: () async {
                     await uploadPDF();
                     // ignore: use_build_context_synchronously
-                    Navigator.pop(context);
+                    Navigator.pushAndRemoveUntil(
+                      // ignore: use_build_context_synchronously
+                      context,
+                      MaterialPageRoute(builder: (builder) => AuthWrapper()),
+                      (predicate) => false,
+                    );
                   },
                   icon: const Icon(Icons.upload_file),
                   label: const Text("Upload PDF"),

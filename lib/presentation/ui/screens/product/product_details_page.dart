@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce/data/firebase/collection_holder.dart';
 import 'package:ecommerce/presentation/state_holders/main_bottom_nav_controller.dart';
+import 'package:ecommerce/presentation/ui/screens/product/checkout_screen.dart';
 import 'package:ecommerce/presentation/ui/screens/product/product_list_screen.dart';
 import 'package:ecommerce/presentation/ui/utility/app_colors.dart';
 import 'package:ecommerce/presentation/ui/utility/snack_message.dart';
@@ -26,7 +27,6 @@ class ProductDetailsPage extends StatefulWidget {
 class _ProductDetailsPageState extends State<ProductDetailsPage> {
   Color? selectedColor;
   String? selectedSize;
-
 
   @override
   Widget build(BuildContext context) {
@@ -280,64 +280,90 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
       ),
       child: SafeArea(
         top: false,
-        child: Row(
-          children: [
-            Expanded(
-              child: OutlinedButton(
-                onPressed: () async {
-                  await addToCart(
-                    productId: widget.product['id'],
-                    name: widget.product['product_name'],
-                    image: widget.product['images'][0],
-                    price: widget.product['price'],
-                    size: selectedSize ?? "",
-                    color: selectedColor != null
-                        ? getColorName(selectedColor!)
-                        : null,
-                  );
-                },
+        child: widget.product['quantity'] > 0
+            ? Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: () async {
+                        await addToCart(
+                          productId: widget.product['id'],
+                          name: widget.product['product_name'],
+                          image: widget.product['images'][0],
+                          price: widget.product['price'],
+                          size: selectedSize ?? "",
+                          color: selectedColor != null
+                              ? getColorName(selectedColor!)
+                              : null,
+                        );
+                      },
 
-                style: OutlinedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  side: BorderSide(color: AppColors.primaryColor),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                child: const Text(
-                  "Add to Cart",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.primaryColor,
-                  ),
-                ),
-              ),
-            ),
+                      style: OutlinedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        side: BorderSide(color: AppColors.primaryColor),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
 
-            const SizedBox(width: 12),
+                      child: const Text(
+                        "Add to Cart",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.primaryColor,
+                        ),
+                      ),
+                    ),
+                  ),
 
-            Expanded(
-              child: ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primaryColor,
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+                  const SizedBox(width: 12),
+
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        final product = widget.product;
+
+                        Get.to(
+                          () => CheckoutScreen(
+                            items: [
+                              {
+                                'product_id': product['id'],
+                                'name': product['product_name'],
+                                'price': product['price'],
+                                'quantity': 1,
+                                'image':
+                                    (product['images'] != null &&
+                                        product['images'] is List &&
+                                        product['images'].isNotEmpty)
+                                    ? product['images'][0]
+                                    : '',
+                                'color': selectedColor,
+                                'size': selectedSize,
+                              },
+                            ],
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primaryColor,
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        elevation: 2,
+                      ),
+                      child: const Text(
+                        "Buy Now",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
                   ),
-                  elevation: 2,
-                ),
-                child: const Text(
-                  "Buy Now",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
+                ],
+              )
+            : ElevatedButton(onPressed: null, child: Text("Out of Stock")),
       ),
     );
   }

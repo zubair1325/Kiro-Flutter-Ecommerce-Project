@@ -44,7 +44,7 @@ class _SignupScreenState extends State<SignupScreen> {
               child: Center(
                 child: Column(
                   children: [
-                    AppLogo(width: 140),
+                    AppLogo(width: 110),
                     SizedBox(height: 15),
                     Text(
                       "Complect Profile",
